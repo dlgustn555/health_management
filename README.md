@@ -1,6 +1,6 @@
 # URL
 - Local
-> local-health.lhs.com
+> local-health.lhs.com:3000
 - DEV
 > dev-health.lhs.com
 - Real
