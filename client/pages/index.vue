@@ -6,7 +6,7 @@
         client
       </h1>
       <h2 class="subtitle">
-        healt management view
+        My outstanding Nuxt.js project
       </h2>
       <div class="links">
         <a
@@ -33,6 +33,7 @@ export default {
 </script>
 
 <style>
+
 .container {
   min-height: 100vh;
   display: flex;

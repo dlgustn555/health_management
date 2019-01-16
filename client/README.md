@@ -1,6 +1,6 @@
 # client
 
-> healt management view
+> My outstanding Nuxt.js project
 
 ## Build Setup
 
