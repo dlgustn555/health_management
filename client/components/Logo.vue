@@ -1,11 +1,22 @@
 <template>
-  <div class="VueToNuxtLogo">
-    <div class="Triangle Triangle--two"/>
-    <div class="Triangle Triangle--one"/>
-    <div class="Triangle Triangle--three"/>
-    <div class="Triangle Triangle--four"/>
+  <div>
+    <div class="VueToNuxtLogo">
+      <div class="Triangle Triangle--two"/>
+      <div class="Triangle Triangle--one"/>
+      <div class="Triangle Triangle--three"/>
+      <div class="Triangle Triangle--four"/>
+    </div>
   </div>
 </template>
+
+<script>
+export default {
+  name: 'Logo',
+  mounted() {
+    console.log('component')
+  }
+}
+</script>
 
 <style>
 .VueToNuxtLogo {

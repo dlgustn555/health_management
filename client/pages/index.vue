@@ -1,6 +1,8 @@
 <template>
   <section class="container">
     <div>
+      {{ a }}
+      <p>{{ $device.isDesktop }}</p>
       <logo/>
       <h1 class="title">
         client
@@ -26,8 +28,20 @@
 import Logo from '~/components/Logo.vue'
 
 export default {
+  layout({ isMobile }) {
+    console.log(isMobile)
+    return isMobile ? 'default' : 'test'
+  },
   components: {
     Logo
+  },
+  data() {
+    return {
+      a: 'abcd'
+    }
+  },
+  mounted() {
+    console.log('page')
   }
 }
 </script>
