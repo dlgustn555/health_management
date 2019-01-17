@@ -1,5 +1,3 @@
-테스트
-
 # URL
 - Local
 > local-health.lhs.com:1530
