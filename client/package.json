@@ -24,7 +24,9 @@
     "bootstrap-vue": "^2.0.0-beta",
     "cross-env": "^5.2.0",
     "nuxt": "^2.0.0",
-    "nuxt-device-detect": "^1.1.2"
+    "nuxt-device-detect": "^1.1.2",
+    "rxjs": "^6.3.3",
+    "vue-rx": "^6.1.0"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.1",

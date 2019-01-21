@@ -1,7 +1,7 @@
 <template>
   <section class="container">
     <div>
-      {{ a }}
+      <h1>인트로화면 - 목록조회(캘린더)</h1>
       <p>{{ $device.isDesktop }}</p>
       <logo/>
       <h1 class="title">
@@ -29,7 +29,6 @@ import Logo from '~/components/Logo.vue'
 
 export default {
   layout({ isMobile }) {
-    console.log(isMobile)
     return isMobile ? 'default' : 'test'
   },
   components: {

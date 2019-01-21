@@ -30,7 +30,7 @@ module.exports = {
   /*
   ** Plugins to load before mounting the App
   */
-  plugins: [],
+  plugins: [{ src: '~/plugins/vue-rx', ssr: false }],
 
   /*
   ** Nuxt.js modules
@@ -66,6 +66,23 @@ module.exports = {
           exclude: /(node_modules)/
         })
       }
+    }
+  },
+
+  router: {
+    extendRoutes(routes, resolve) {
+      routes.push(
+        {
+          name: '샘플 코드용',
+          path: '/sample/:id?',
+          component: '~/pages/sample'
+        },
+        {
+          name: '인트로화면(리스트)',
+          path: '*',
+          component: '~/pages/list.vue'
+        }
+      )
     }
   }
 }
