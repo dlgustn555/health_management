@@ -22,8 +22,10 @@
 - 헬스 엔터테인먼트로 발전시키자!!! 
 - 아자아자 할 수 있다!!!!
 
+### client
 
-### URL
+> 화면을 담당합니다.
+
 - Local
 > local-health.lhs.com:1530
 
@@ -36,10 +38,6 @@
 
 - Real
 > health.lhs.com
-
-### client
-
-> 화면을 담당합니다.
 
 ### server
 
