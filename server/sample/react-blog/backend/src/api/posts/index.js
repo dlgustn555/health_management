@@ -3,8 +3,16 @@ const Router = require('koa-router')
 const posts = new Router()
 
 const printInfo = (ctx) => {
-  const { method, path, params } = ctx
-  ctx.body = { method, path, params }
+  const {
+    method,
+    path,
+    params,
+    query
+  } = ctx
+
+  ctx.body = {
+    method, path, params, query
+  }
 }
 
 posts.get('/', printInfo)

@@ -11,7 +11,7 @@ const router = new Router()
 router.use('/api', api.routes())
 
 // 라우터 적용전에 bodyParser 적용
-app.use(bodyParser)
+app.use(bodyParser())
 
 // app 인스턴스에 라우터 적용
 app.use(router.routes()).use(router.allowedMethods())

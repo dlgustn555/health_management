@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "dev": "nodemon --watch src/ src/index.js"
+    "dev:blog": "nodemon --watch react-blog/backend/src/ react-blog/backend/src/index.js"
   },
   "dependencies": {
     "koa": "^2.6.2",
