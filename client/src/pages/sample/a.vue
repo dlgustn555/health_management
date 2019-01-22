@@ -9,23 +9,40 @@
 </template>
 
 <script>
-import { fromEvent, pipe } from 'rxjs'
-import { pluck } from 'rxjs/operators'
+import { fromEvent, pipe, from } from 'rxjs'
+import { pluck, filter } from 'rxjs/operators'
+import { users } from './js/a'
 
 export default {
   components: {},
   data() {
     return {
-      a: 'abcd'
+      a: '123'
     }
   },
   mounted() {
+    console.log(users.filter(user => user.sex === 'M'))
+    const users$ = from(users).pipe(filter(user => user.sex === 'M'))
+    console.log(from(users$))
+    users$.subscribe(user => console.log(user))
+
+    const observer$ = {
+      next: x => console.log(`Observer가 Observable로부터 받은 데이터 : ${x}`),
+      error: err =>
+        console.error(`Observer가 Observable로부터 받은 에러 데이터 : ${err}`),
+      complete: () =>
+        console.log('Observer가 Observable로부터 종료되었다는 알림을 받은 경우')
+    }
+
     fromEvent(document, 'click')
-      .pipe(pluck('target', 'tagName'))
-      .subscribe(this.eventHandler)
+      .pipe(pluck('target'))
+      .subscribe(observer$)
   },
   methods: {
     eventHandler: function(x) {
+      if (typeof x !== 'string') {
+        console.log(x.target.tagName)
+      }
       console.log(x)
     }
   }
