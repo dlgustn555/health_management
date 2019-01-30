@@ -22,3 +22,5 @@ vue 파일 생성 패턴 : pages/sample 하위에
 - 테스트3.vue
 
 
+typescript 적용 예시
+https://github.com/johnpapa/vue-typescript/tree/typescript

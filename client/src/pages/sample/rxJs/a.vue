@@ -5,19 +5,20 @@
       @click.stop="eventHandler">
       버튼 1
     </b-button>
+    <p>{{ a }}</p>
   </div>
 </template>
 
 <script>
 import { fromEvent, pipe, from } from 'rxjs'
 import { pluck, filter } from 'rxjs/operators'
-import { users } from './js/a'
+import { users } from '../js/a'
 
 export default {
   components: {},
   data() {
     return {
-      a: '123'
+      a: 'aaa'
     }
   },
   mounted() {
