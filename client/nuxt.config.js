@@ -14,7 +14,7 @@ module.exports = {
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { hid: 'description', name: 'description', content: pkg.description }
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
+    link: [{ rel: 'icon', type: 'image/x-icon', href: '/health.png' }]
   },
 
   /*
@@ -73,14 +73,14 @@ module.exports = {
     extendRoutes(routes, resolve) {
       routes.push(
         {
-          name: '샘플 코드용',
-          path: '/sample/:id?',
-          component: '~/pages/sample'
-        },
-        {
           name: '인트로화면(리스트)',
           path: '*',
           component: '~/pages/list.vue'
+        },
+        {
+          name: '샘플 코드용',
+          path: '/sample/:id?',
+          component: '~/pages/sample'
         }
       )
     }
