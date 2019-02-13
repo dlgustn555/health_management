@@ -54,7 +54,7 @@ export default {
     year() {
       return this.oDate.getFullYear()
     },
-    // 2월 이면 1 리턴
+    // ※ 주의!! ※ 선택한 "month - 1"을 리턴. (ex) 1월: 0, 2월: 1...
     month() {
       return this.oDate.getMonth()
     },
