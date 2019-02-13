@@ -1,7 +1,7 @@
 <template>
   <div class="schedulecalendar_container">
     <div class="selected_month">
-      <p class="month">{{ month + 1 }} 월</p>
+      <h1 class="month">{{ month + 1 }}월</h1>
       <table border="1">
         <tbody>
           <tr>
@@ -24,7 +24,7 @@
       </table>
     </div>
     <p>
-      시작일 : {{ DAYS[START_DAY][startDay] }} 요일 ({{ startDay }})
+      시작일 : {{ DAYS[START_DAY][startDay] }}요일 ({{ startDay }})
     </p>
   </div>
 </template>
@@ -45,7 +45,6 @@ export default {
     }
   },
   computed: {
-    // 달의 days
     DAY_PER_MONTHS() {
       const { year } = this
       const twoMonthDay =
@@ -58,10 +57,12 @@ export default {
     month() {
       return this.oDate.getMonth()
     },
+    // [월, 화, 수, 목, 금...]
     aDays() {
       const { DAYS, START_DAY } = this
       return DAYS[START_DAY]
     },
+    // 시작요일
     startDay() {
       const { year, month, START_DAY } = this
       const date = 1
@@ -73,6 +74,7 @@ export default {
       }
       return startDay
     },
+    // 달의 마지막날짜
     lastDate() {
       const { DAY_PER_MONTHS, month } = this
       return DAY_PER_MONTHS[month]
