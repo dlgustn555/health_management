@@ -54,10 +54,11 @@ export default {
     year() {
       return this.oDate.getFullYear()
     },
+    // 2월 이면 1 리턴
     month() {
       return this.oDate.getMonth()
     },
-    // [월, 화, 수, 목, 금...]
+    // [월, 화, 수, 목, 금...] or [일, 월, 화, 수...]
     aDays() {
       const { DAYS, START_DAY } = this
       return DAYS[START_DAY]
@@ -74,7 +75,7 @@ export default {
       }
       return startDay
     },
-    // 달의 마지막날짜
+    // 마지막날짜
     lastDate() {
       const { DAY_PER_MONTHS, month } = this
       return DAY_PER_MONTHS[month]
