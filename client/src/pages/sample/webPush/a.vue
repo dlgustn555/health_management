@@ -73,6 +73,7 @@ export default {
         applicationServerPublicKey
       )
 
+      console.log(applicationServerKey)
       const _this = this
       this.serviceWorker.pushManager
         .subscribe({
