@@ -1,32 +1,29 @@
 <template>
   <div class="schedulecalendar_container">
     <div class="selected_month">
-      <h1 class="month">{{ month + 1 }}월</h1>
-      <table border="1">
-        <tbody>
-          <tr>
-            <td
-              v-for="(day, index) in aDays"
-              :key="index">
-              {{ day }}요일
-            </td>
-          </tr>
-          <tr
-            v-for="row in MAX_ROWS"
-            :key="row">
-            <td
-              v-for="column in MAX_COLS"
-              :key="column"
-              :class="isToday(row - 1, column - 1)">
-              {{ getColumnDate(row - 1, column - 1) }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <h1 class="date">{{ year }}.{{ month + 1 }}월</h1>
     </div>
-    <p>
-      시작일 : {{ DAYS[START_DAY][startDay] }}요일 ({{ startDay }})
-    </p>
+    <div>
+      <div class="week header">
+        <div
+          v-for="(day, index) in aDays"
+          :key="index"
+          class="cell">
+          {{ day }}요일
+        </div>
+      </div>
+      <div
+        v-for="(row, rowIndex) in MAX_ROWS"
+        :key="rowIndex"
+        class="week">
+        <div
+          v-for="(schedule, colIndex) in getWeekSchedules(rowIndex)"
+          :key="colIndex"
+          :class="['cell', schedule.isToday ? 'today' : '']">
+          <span v-if="schedule.isDisplay">{{ schedule.date }}</span>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -36,7 +33,7 @@ export default {
     return {
       MAX_ROWS: 5,
       MAX_COLS: 7,
-      START_DAY: 'SUNDAY',
+      START_DAY: 'MONDAY',
       DAYS: {
         MONDAY: ['월', '화', '수', '목', '금', '토', '일'],
         SUNDAY: ['일', '월', '화', '수', '목', '금', '토']
@@ -83,36 +80,72 @@ export default {
     lastDate() {
       const { DAY_PER_MONTHS, month } = this
       return DAY_PER_MONTHS[month]
+    },
+
+    schedules() {
+      const { MAX_ROWS, MAX_COLS } = this
+      const schedules = Array.apply(null, Array(MAX_ROWS * MAX_COLS)).map(
+        (empty, index) => {
+          return {
+            index,
+            ...this._getColumnDate(index),
+            data: {}
+          }
+        }
+      )
+
+      return schedules
     }
   },
   methods: {
-    getColumnDate(row, column) {
-      const columnIndex = row * 7 + column
-      const { startDay, lastDate } = this
-      let date = ''
-
-      if (columnIndex === 0 && columnIndex === startDay) {
-        date = startDay + ''
-      } else if (columnIndex >= startDay) {
-        date = columnIndex - startDay + 1 + ''
+    _getColumnDate(index) {
+      const { startDay, lastDate, year, month, todate } = this
+      const oDate = {
+        isDisplay: false,
+        year,
+        month: month + 1,
+        date: 0
       }
 
-      if (date > lastDate) {
-        date = ''
+      if (index === 0 && index === startDay) {
+        oDate.isDisplay = true
+        oDate.date = 1
+      } else if (index >= startDay) {
+        const date = index - startDay + 1
+        oDate.isDisplay = true
+        oDate.date = date
+        oDate.isToday = date === todate
       }
 
-      return date
+      if (oDate.date > lastDate) {
+        oDate.isDisplay = false
+      }
+
+      return oDate
     },
-    isToday(row, column) {
-      return this.getColumnDate(row, column) === this.todate + ''
-        ? { today: true }
-        : {}
+    getWeekSchedules(rowIndex) {
+      const { schedules, MAX_COLS } = this
+      const begin = rowIndex * MAX_COLS
+      const end = begin + MAX_COLS
+      return schedules.slice(begin, end)
     }
   }
 }
 </script>
 <style>
-.today {
-  border: 5px solid sandybrown;
+.week {
+  display: flex;
+}
+.week.header {
+  text-align: center;
+  background: lightblue;
+}
+.cell {
+  border: 1px solid black;
+  padding: 10px;
+  flex: 1;
+}
+.cell.today {
+  background: sandybrown;
 }
 </style>
