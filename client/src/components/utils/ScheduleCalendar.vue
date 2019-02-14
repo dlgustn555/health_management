@@ -20,10 +20,14 @@
           v-for="(schedule, colIndex) in getWeekSchedules(rowIndex)"
           :key="colIndex"
           :class="['cell', schedule.isToday ? 'today' : '']">
-          <span v-if="schedule.isDisplay">{{ schedule.date }}</span>
+          <div v-if="schedule.isDisplay">{{ schedule.date }}</div>
+          <div>{{ schedule.data }}</div>
         </div>
       </div>
     </div>
+    <pre>
+      {{ result }}
+    </pre>
   </div>
 </template>
 <script>
@@ -39,7 +43,8 @@ export default {
         SUNDAY: ['일', '월', '화', '수', '목', '금', '토']
       },
       MONTH: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-      oDate: new Date()
+      oDate: new Date(),
+      result: ''
     }
   },
   computed: {
@@ -95,6 +100,13 @@ export default {
       )
 
       return schedules
+    }
+  },
+  async created() {
+    const url = '/health'
+    const { status, data } = await this.$axios.get(url)
+    if (status === 200 && data.success) {
+      this.result = data.message
     }
   },
   methods: {
