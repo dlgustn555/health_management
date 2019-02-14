@@ -16,7 +16,8 @@
             :key="row">
             <td
               v-for="column in MAX_COLS"
-              :key="column">
+              :key="column"
+              :class="isToday(row - 1, column - 1)">
               {{ getColumnDate(row - 1, column - 1) }}
             </td>
           </tr>
@@ -58,6 +59,9 @@ export default {
     month() {
       return this.oDate.getMonth()
     },
+    todate() {
+      return this.oDate.getDate()
+    },
     // [월, 화, 수, 목, 금...] or [일, 월, 화, 수...]
     aDays() {
       const { DAYS, START_DAY } = this
@@ -98,7 +102,17 @@ export default {
       }
 
       return date
+    },
+    isToday(row, column) {
+      return this.getColumnDate(row, column) === this.todate + ''
+        ? { today: true }
+        : {}
     }
   }
 }
 </script>
+<style>
+.today {
+  border: 5px solid sandybrown;
+}
+</style>
