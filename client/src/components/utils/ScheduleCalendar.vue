@@ -6,7 +6,7 @@
       <button @click="changeMonth(STATUS.RESET)">오늘</button>
       <button @click="changeMonth(STATUS.NEXT)">다음</button>
       <button @click="changeYear(STATUS.NEXT)">다음년도</button>
-      <select v-model="START_DAY">
+      <select v-model="START_DAY_TYPE">
         <option value="SUNDAY">일요일</option>
         <option value="MONDAY">월요일</option>
       </select>
@@ -20,7 +20,7 @@
     <div>
       <div class="week header">
         <div
-          v-for="(day, index) in DAYS[START_DAY]"
+          v-for="(day, index) in DAYS[START_DAY_TYPE]"
           :key="index"
           class="cell">
           {{ day }}요일
@@ -28,7 +28,7 @@
       </div>
 
       <div
-        v-for="(week, weekIndex) in MAX_ROWS"
+        v-for="(week, weekIndex) in MAX_ROWS(year, month)"
         :key="weekIndex"
         class="week">
         <div
@@ -42,10 +42,6 @@
         </div>
       </div>
     </div>
-    <p>{{ test }}</p>
-    <p>{{ test }}</p>
-    <p>{{ test }}</p>
-    <p>{{ test }}</p>
   </div>
 </template>
 <script>
@@ -61,7 +57,7 @@ export default {
       },
       IS_FULL: false,
       MAX_COLS: 7,
-      START_DAY: 'SUNDAY',
+      START_DAY_TYPE: 'SUNDAY',
       DAYS: {
         MONDAY: ['월', '화', '수', '목', '금', '토', '일'],
         SUNDAY: ['일', '월', '화', '수', '목', '금', '토']
@@ -72,10 +68,6 @@ export default {
     }
   },
   computed: {
-    test() {
-      console.log('TEST')
-      return 'test'
-    },
     schedules() {
       return {
         prev: this._getSchedules(this.STATUS.PREV),
@@ -88,13 +80,6 @@ export default {
       const twoMonthDay =
         (year % 100 !== 0 && year % 4 === 0) || year % 400 === 0 ? 29 : 28
       return [31, twoMonthDay, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-    },
-    MAX_ROWS() {
-      // const startDays = this.schedules.now.filter(({ isDisplay, index }) => {
-      //   return isDisplay && (index === 0 || index % 7 === 0)
-      // })
-      const startDays = [1, 2, 3, 4, 5]
-      return startDays.length
     },
     year() {
       return this.oDate.getFullYear()
@@ -115,6 +100,11 @@ export default {
     // }
   },
   methods: {
+    MAX_ROWS(year, month) {
+      const startDay = this._getStartDay(year, month)
+      const lastDate = this.DAY_PER_MONTHS[month]
+      return Math.ceil((startDay + lastDate) / 7)
+    },
     changeYear(status) {
       const { STATUS, oDate, year, month } = this
       const changeYear = status === STATUS.PREV ? year - 1 : year + 1
@@ -124,7 +114,14 @@ export default {
       this.oDate = this._getDateByMonth(status)
     },
     getWeekSchedules(weekIndex, status) {
-      const { schedules, IS_FULL, MAX_ROWS, MAX_COLS, STATUS } = this
+      const {
+        year,
+        month,
+        schedules,
+        IS_FULL,
+        MAX_COLS,
+        STATUS: { PREV, NOW, NEXT }
+      } = this
       const begin = weekIndex * MAX_COLS
       const end = begin + MAX_COLS
       const weekSchedules = schedules[status].slice(begin, end)
@@ -133,19 +130,21 @@ export default {
         return weekSchedules
       }
 
-      if (status === STATUS.NOW && weekIndex === 0) {
-        const pwIndex = MAX_ROWS - 1
-        const pwSchedules = this.getWeekSchedules(pwIndex, STATUS.PREV)
-        const startDay = this._getStartDay(this.year, this.month)
+      if (status === NOW && weekIndex === 0) {
+        const prevDate = this._getDateByMonth(PREV)
+        const pwIndex =
+          this.MAX_ROWS(prevDate.getFullYear(), prevDate.getMonth()) - 1 // 이전달의 총 주차 구할것!!
+        const pwSchedules = this.getWeekSchedules(pwIndex, PREV)
+        const startDay = this._getStartDay(year, month)
         return [
           ...pwSchedules.slice(0, startDay),
           ...weekSchedules.slice(startDay)
         ]
       }
 
-      if (status === this.STATUS.NOW && weekIndex === MAX_ROWS - 1) {
-        const lastDay = this._getLastDay(this.year, this.month) + 1
-        const nextWekkSchedules = this.getWeekSchedules(0, STATUS.NEXT)
+      if (status === NOW && weekIndex === this.MAX_ROWS(year, month) - 1) {
+        const lastDay = this._getLastDay(year, month) + 1
+        const nextWekkSchedules = this.getWeekSchedules(0, NEXT)
         return [
           ...weekSchedules.splice(0, lastDay),
           ...nextWekkSchedules.splice(lastDay)
@@ -156,16 +155,17 @@ export default {
     _getSchedules(status) {
       const oDate = this._getDateByMonth(status)
       const oDateOtion = this._getDateOption(oDate, status)
-      const { MAX_ROWS, MAX_COLS } = this
-      return Array.apply(null, Array(MAX_ROWS * MAX_COLS)).map(
-        (empty, index) => {
-          return {
-            index,
-            status,
-            ...this._getColumnDate(oDateOtion, index)
-          }
+      const { MAX_COLS } = this
+      return Array.apply(
+        null,
+        Array(this.MAX_ROWS(oDate.getFullYear(), oDate.getMonth()) * MAX_COLS)
+      ).map((empty, index) => {
+        return {
+          index,
+          status,
+          ...this._getColumnDate(oDateOtion, index)
         }
-      )
+      })
     },
     _getDateOption(oDate, status) {
       const year = oDate.getFullYear()
@@ -182,8 +182,8 @@ export default {
       const SUNDAY = 0
       const date = 1
       let startDay = new Date(year, month, date).getDay()
-      if (this.START_DAY === 'MONDAY') {
-        startDay = startDay === SUNDAY ? 0 : startDay - 1
+      if (this.START_DAY_TYPE === 'MONDAY') {
+        startDay = startDay === SUNDAY ? 6 : startDay - 1
       }
       return startDay
     },
@@ -191,8 +191,8 @@ export default {
       const SUNDAY = 0
       const date = this.DAY_PER_MONTHS[month]
       let lastDay = new Date(year, month, date).getDay()
-      if (this.START_DAY === 'MONDAY') {
-        lastDay = lastDay === SUNDAY ? 0 : lastDay - 1
+      if (this.START_DAY_TYPE === 'MONDAY') {
+        lastDay = lastDay === SUNDAY ? 6 : lastDay - 1
       }
       return lastDay
     },
