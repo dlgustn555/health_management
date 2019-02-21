@@ -7,8 +7,8 @@
       <button @click="changeMonth(STATUS.NEXT)">다음</button>
       <button @click="changeYear(STATUS.NEXT)">다음년도</button>
       <select v-model="START_DAY_TYPE">
-        <option value="SUNDAY">일요일</option>
-        <option value="MONDAY">월요일</option>
+        <option :value="START_DAY.SUNDAY">일요일</option>
+        <option :value="START_DAY.MONDAY">월요일</option>
       </select>
       <input
         id="check_full"
@@ -57,14 +57,16 @@ export default {
       },
       IS_FULL: false,
       MAX_COLS: 7,
-      START_DAY_TYPE: 'SUNDAY',
-      DAYS: {
-        MONDAY: ['월', '화', '수', '목', '금', '토', '일'],
-        SUNDAY: ['일', '월', '화', '수', '목', '금', '토']
+      START_DAY_TYPE: 'sunday',
+      START_DAY: {
+        MONDAY: 'monday',
+        SUNDAY: 'sunday'
       },
-      MONTH: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-      oDate: new Date(),
-      result: ''
+      DAYS: {
+        monday: ['월', '화', '수', '목', '금', '토', '일'],
+        sunday: ['일', '월', '화', '수', '목', '금', '토']
+      },
+      oDate: new Date()
     }
   },
   computed: {
