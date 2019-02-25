@@ -1,5 +1,7 @@
 <template>
   <div class="schedulecalendar_container">
+    <create-schedule-template-modal />
+
     <div class="selected_month">
       <button @click="changeYear(STATUS.PREV)">이전년도</button>
       <button @click="changeMonth(STATUS.PREV)">이전</button>
@@ -17,7 +19,14 @@
       <label for="check_full">FULL</label>
       <h1 class="date">{{ year }}.{{ month + 1 }}월</h1>
     </div>
-    <div>
+
+    <div class="contents">
+      <div class="c-right">
+        <b-button
+          v-b-modal.createScheduleTemplate
+          variant="outline-primary">+추가하기</b-button>
+      </div>
+
       <div class="week header">
         <div
           v-for="(day, index) in DAYS[START_DAY_TYPE]"
@@ -35,9 +44,15 @@
           v-for="(schedule, colIndex) in getWeekSchedules(weekIndex, STATUS.NOW)"
           :key="colIndex"
           :class="['cell', schedule.isToday ? 'today' : '']">
+          
           <div v-if="schedule.isDisplay">
             <div :class="schedule.status">{{ schedule.date }}</div>
-            <div>{{ schedule.data }}</div>
+            <div
+              v-if="schedule.date === 20"
+              class="health">헬스 - 어깨</div>
+            <div
+              v-if="schedule.date === 20 || schedule.date === 19"
+              class="boxing">복싱</div>
           </div>
         </div>
       </div>
@@ -45,8 +60,11 @@
   </div>
 </template>
 <script>
+import CreateScheduleTemplateModal from '~/components/modal/CreateScheduleTemplateModal.vue'
+
 export default {
   name: 'ScheduleCalendar',
+  components: { CreateScheduleTemplateModal },
   data() {
     return {
       STATUS: {
@@ -66,7 +84,10 @@ export default {
         monday: ['월', '화', '수', '목', '금', '토', '일'],
         sunday: ['일', '월', '화', '수', '목', '금', '토']
       },
-      oDate: new Date()
+      oDate: new Date(),
+      modal: {
+        create: false
+      }
     }
   },
   computed: {
@@ -237,13 +258,18 @@ export default {
   }
 }
 </script>
-<style>
+<style scoped>
+.contents {
+  width: 1050px;
+}
 .week {
   display: flex;
+  height: 100px;
 }
 .week.header {
   text-align: center;
   background: lightblue;
+  height: auto;
 }
 .cell {
   border: 1px solid black;
@@ -256,5 +282,14 @@ export default {
 .cell .prev,
 .cell .next {
   font-style: italic;
+}
+.health {
+  background: #ff4000;
+}
+.boxing {
+  background: #04b431;
+}
+.c-right {
+  text-align: right;
 }
 </style>

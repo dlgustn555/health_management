@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import ScheduleCalendar from '~/components/utils/ScheduleCalendar.vue'
+import ScheduleCalendar from '~/components/ScheduleCalendar.vue'
 
 export default {
   layout({ isMobile }) {

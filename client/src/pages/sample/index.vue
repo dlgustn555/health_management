@@ -1,6 +1,31 @@
 <template>
   <div>
-    <h1>Sample!!</h1>
+    <div
+      style="border: 1px solid black;position:relative;"
+      @click="addTags">
+      <img src="~assets/images/7.jpg">
+      <div
+        v-for="(tag, index) in tags"
+        :style="tag.oStyle"
+        :key="index"
+        class="tag"
+        @click.stop="updateTag(tag, 'form')">
+        <span v-if="tag.status === 'none'">{{ tag.name }}</span>
+        <a
+          v-else-if="tag.status === 'done'"
+          target="_blank"
+          @click.stop="clickTagLink(tag, $event)">{{ tag.name }}</a>
+        <div v-else>
+          <p>태그명 : <input
+            v-model="tag.name"
+            type="text"></p>
+          <p>링크 : <input
+            v-model="tag.href"
+            type="text"></p>
+          <button @click.stop="updateTag(tag, 'done')">등록</button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -9,11 +34,37 @@ export default {
   components: {},
   data() {
     return {
-      a: 'abcd'
+      a: 'abcd',
+      count: 0,
+      tags: []
     }
   },
   mounted() {
     console.log('page')
+  },
+  methods: {
+    addTags(event) {
+      const id = this.count++
+      const tag = {
+        id,
+        name: `tagName_${id}`,
+        href: '',
+        status: 'none',
+        oStyle: {
+          top: event.clientY + 'px',
+          left: event.clientX + 'px'
+        }
+      }
+      this.tags.push(tag)
+    },
+    updateTag(tag, status) {
+      tag.status = status
+      this.tags = this.tags.map(t => (t.id === tag.id ? tag : t))
+    },
+    clickTagLink(tag, event) {
+      event.preventDefault()
+      location.href = tag.href
+    }
   }
 }
 </script>
@@ -47,5 +98,11 @@ export default {
 
 .links {
   padding-top: 15px;
+}
+.tag {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: silver;
 }
 </style>

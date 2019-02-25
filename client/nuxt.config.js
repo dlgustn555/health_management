@@ -25,12 +25,19 @@ module.exports = {
   /*
   ** Global CSS
   */
-  css: [],
+  css: [
+    'bootstrap/dist/css/bootstrap.css',
+    'bootstrap-vue/dist/bootstrap-vue.css',
+    'swiper/dist/css/swiper.css'
+  ],
 
   /*
   ** Plugins to load before mounting the App
   */
-  plugins: [{ src: '~/plugins/vue-rx', ssr: false }],
+  plugins: [
+    { src: '~/plugins/vue-rx', ssr: false },
+    { src: '~/plugins/vue-awesome-swiper', ssr: false }
+  ],
 
   /*
   ** Nuxt.js modules
