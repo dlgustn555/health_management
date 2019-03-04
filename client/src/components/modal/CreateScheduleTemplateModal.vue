@@ -5,7 +5,9 @@
     ok-only
     ok-title="등록"
     no-close-on-backdrop
-    size="lg">
+    size="lg"
+    @hide="initScheduleTemplate">
+    
     <label for="type">♣운동타입♣ 을 등록하세요.</label>
     <b-form-input
       id="type"
@@ -14,51 +16,44 @@
       placeholder="(ex) 헬스/복싱/요가/유산소.." />
 
     <b-form-group label="♣운동요일♣ 을 등록하세요.">
-      <b-form-checkbox-group
-        v-model="days"
-        :options="DAY_OF_WEEK" />
+      <b-form-checkbox-group v-model="days">
+        <b-form-checkbox
+          v-for="day in DAY_OF_WEEK"
+          :key="day"
+          :value="day">{{ day }}요일</b-form-checkbox>
+      </b-form-checkbox-group>
     </b-form-group>
 
-    <b-form-select
-      v-model="once"
-      :options="ONCE_OF_WEEK" />
-
+    <b-form-select v-model="once">
+      <option
+        v-for="count in 7"
+        :key="count"
+        :value="count">{{ count }}일차</option>
+    </b-form-select>
     <div
       v-swiper:createScheduleTemplateSwiper="swiperOption"
       class="createScheduleTemplateSwiper">
       <div class="swiper-wrapper">
-        <div
+        <ScheduleTemplateForm
           v-for="(template, index) in once"
+          ref="scheduleTemplateForm"
           :key="index"
-          class="swiper-slide">{{ index + 1 }}</div>
+          :once="index + 1"
+          class="swiper-slide" />
       </div>
       <div class="swiper-pagination" />
     </div>
   </b-modal>
 </template>
 <script>
+import ScheduleTemplateForm from '~/components/form/ScheduleTemplateForm.vue'
+
 export default {
   name: 'CreateScheduleTemplateModal',
+  components: { ScheduleTemplateForm },
   data() {
     return {
-      DAY_OF_WEEK: [
-        { text: '월요일', value: '월' },
-        { text: '화요일', value: '화' },
-        { text: '수요일', value: '수' },
-        { text: '목요일', value: '목' },
-        { text: '금요일', value: '금' },
-        { text: '토요일', value: '토' },
-        { text: '일요일', value: '일' }
-      ],
-      ONCE_OF_WEEK: [
-        { text: '1일차', value: 1 },
-        { text: '2일차', value: 2 },
-        { text: '3일차', value: 3 },
-        { text: '4일차', value: 4 },
-        { text: '5일차', value: 5 },
-        { text: '6일차', value: 6 },
-        { text: '7일차', value: 7 }
-      ],
+      DAY_OF_WEEK: ['월', '화', '수', '목', '금', '토', '일'],
       templates: [],
       type: '',
       days: [],
@@ -81,9 +76,19 @@ export default {
   created() {
     this.templates.push({})
   },
+  destroyed() {
+    console.log('CALL!!')
+  },
   methods: {
     toggleDayofWeek(checked) {
-      this.days = checked ? ['월', '화', '수', '목', '금', '토', '일'] : []
+      this.days = checked ? [...this.DAY_OF_WEEK] : []
+    },
+    initScheduleTemplate() {
+      this.type = ''
+      this.days = []
+      this.once = 1
+      const scheduleTemplateForm = this.$refs.scheduleTemplateForm[0]
+      scheduleTemplateForm.initTemplateForm()
     }
   }
 }
@@ -91,6 +96,5 @@ export default {
 <style scoped>
 .createScheduleTemplateSwiper {
   width: 100%;
-  height: 300px;
 }
 </style>
