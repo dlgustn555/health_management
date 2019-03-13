@@ -41,3 +41,12 @@ nuxt, vue, rxjs, es6
 ### server
 
 > API 및 BACK단 비즈니스 로직을 담당합니다.
+
+
+### PC
+ - Client : NUXT 
+ - Server : NODE
+ - DB : MongoDB
+### Mobile
+ - Client : Native Vue
+ - Server : Apolo !?
