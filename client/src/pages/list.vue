@@ -9,12 +9,7 @@ export default {
   layout({ isMobile }) {
     return isMobile ? 'default' : 'default'
   },
-  components: {
-    ScheduleCalendar
-  },
-  data() {
-    return {}
-  }
+  components: { ScheduleCalendar }
 }
 </script>
 

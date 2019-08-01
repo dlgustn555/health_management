@@ -22,7 +22,8 @@
 - 헬스 엔터테인먼트로 발전시키자!!! 
 - 아자아자 할 수 있다!!!!
 
-### client
+### ♣ client
+#### PORT: 1530
 
 > 화면을 담당합니다.
 
@@ -38,10 +39,10 @@
 #### 구현스펙!?
 nuxt, vue, rxjs, es6
 
-### server
+### ♣ server
+#### PORT: 1702
 
 > API 및 BACK단 비즈니스 로직을 담당합니다.
-
 
 ### PC
  - Client : NUXT 
