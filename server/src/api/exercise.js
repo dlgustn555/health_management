@@ -1,7 +1,12 @@
 const Router = require('koa-router');
-const exercise = require('./exercise');
 
 const router = new Router();
-router.use('/exercise', exercise);
+
+router.get('/', (ctx) => {
+  ctx.body = {
+    success: true,
+    message: 'First API CALL!!'
+  };
+});
 
 module.exports = router.routes();
