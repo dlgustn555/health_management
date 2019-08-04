@@ -11,8 +11,8 @@ const dbUrl = isHome ? 'mongodb://localhost:27017' : 'mongodb://talk_rw:talk_rw@
 
 mongoose.connect(dbUrl, { useNewUrlParser: true, dbName: 'exercise' })
   .then(() => {
-    console.log('Successfully connected to mongoDB!')
-    console.log(`DB URL => ${dbUrl}`)
+    console.log('●●● Successfully connected to mongoDB!')
+    console.log(`●●● DB URL => ${dbUrl}`)
   })
   .catch(e => console.error(e));
 
@@ -24,5 +24,5 @@ app.use(api);
 
 // 3. 노드 서버 실행
 app.listen(1702, () => {
-  console.log('Health Server Listening PORT : 1702');
+  console.log('●●● Health Server Listening PORT : 1702');
 });
