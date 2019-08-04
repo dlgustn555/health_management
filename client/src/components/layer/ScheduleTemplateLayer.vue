@@ -69,7 +69,16 @@
         <div class="swiper-pagination" />
       </div>
       <div class="field_button">
-        <button @click="registTemplate">등록</button>
+        <button 
+          v-if="templateType === 'new'"
+          @click="registTemplate">
+          등록
+        </button>
+        <button 
+          v-else
+          @click="modifyTemplate">
+          수정
+        </button>
         <button @click="closeLayer">닫기</button>
       </div>
     </div>
@@ -85,6 +94,12 @@ import ScheduleTemplateForm from '@/components/form/ScheduleTemplateForm.vue'
 export default {
   name: 'ScheduleTemplateLayer',
   components: { ScheduleTemplateForm },
+  props: {
+    templateType: {
+      type: String,
+      default: 'new'
+    }
+  },
   data() {
     return {
       isAll: false,
@@ -129,6 +144,17 @@ export default {
     toggleDays() {
       const isCheckAll = !this.isAll
       this.days = isCheckAll ? [...CONSTANT.DAY_OF_WEEK] : []
+    },
+
+    async modifyTemplate() {
+      const { data, success } = await this.$store.dispatch(
+        CONSTANT.MODIFY_TEMPLATE
+      )
+      const message = success
+        ? '수정되었습니다.'
+        : `수정에 실패했습니다.\n${data.error.message}`
+      alert(message)
+      this.closeLayer()
     },
 
     async registTemplate() {

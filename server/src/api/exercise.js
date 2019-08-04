@@ -1,6 +1,6 @@
 const Router = require('koa-router');
 const Template = require('../model/templateModel');
-const { save, find, findById } = require('../util/util.js');
+const { save, find, findById, findByIdAndUpdate } = require('../util/util.js');
 
 const router = new Router();
 
@@ -29,6 +29,13 @@ router.get('/template/user/:userId', async (ctx) => {
 router.get('/template/:templateId', async (ctx) => {
   const { templateId } = ctx.params;
   ctx.body = await findById(Template, templateId);
+})
+
+// 특정ID 템플릿 수정
+router.patch('/template/:templateId', async (ctx) => {
+  const { templateId: id } = ctx.params;
+  const { body: update } = ctx.request;
+  ctx.body = await findByIdAndUpdate(Template, id, update);
 })
 
 module.exports = router.routes();

@@ -45,5 +45,9 @@ export default {
 
   [CONSTANT.UPDATE_TEMPLATE](state, template) {
     state.template = template
+  },
+
+  [CONSTANT.SET_CATEGORY_LIST](state, aTemplate) {
+    state.aTemplate = aTemplate
   }
 }

@@ -15,5 +15,8 @@ export default {
   REMOVE_PROGRAM: 'removeProgram',
   UPDATE_PROGRAM: 'updateProgram',
   REGIST_TEMPLATE: 'registTemplate',
-  UPDATE_TEMPLATE: 'updateTemplate'
+  MODIFY_TEMPLATE: 'modifyTemplate',
+  UPDATE_TEMPLATE: 'updateTemplate',
+  GET_CATEGORY_LIST: 'getCategoryList',
+  SET_CATEGORY_LIST: 'setCategoryList'
 }

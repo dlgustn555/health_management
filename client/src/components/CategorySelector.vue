@@ -2,19 +2,24 @@
   <div>
     <schedule-template-layer
       v-show="isShow"
+      :template-type="templateType"
       @hideLayer="isShow=false" />
     <div>
-      <ul class="template-list">
-        <li
-          v-for="category in aCategory"
-          :key="category._id">
-          {{ category.category }}
-        </li>
-      </ul>
-      <button @click="showScheduleTemplateLayer">
+      <button @click="showRegistScheduleTemplateLayer">
         템플릿 추가+
       </button>
-      
+      <ul class="template-list">
+        <li
+          v-for="template in aTemplate"
+          :key="template._id">
+          <a
+            href="#"
+            title="수정"
+            @click.prevent="showEditScheduleTemplateLayer(template._id)">
+            {{ template.category }}
+          </a>
+        </li>
+      </ul>
     </div>
   </div>
 </template>
@@ -23,6 +28,7 @@
 import { mapState } from 'vuex'
 import API from '@/common/api'
 import CONSTANT from '@/common/constant'
+import L from '@/common/lazy'
 import ScheduleTemplateLayer from '@/components/layer/ScheduleTemplateLayer.vue'
 
 export default {
@@ -31,20 +37,29 @@ export default {
   data() {
     return {
       isShow: false,
-      aCategory: []
+      templateType: 'new'
     }
   },
   computed: {
-    ...mapState(['userId'])
+    ...mapState(['userId', 'aTemplate'])
   },
   async created() {
-    const { data } = await this.$axios.get(API.GET_CATEGORY_LIST(this.userId))
-    this.aCategory = data.success ? data.data.aResult : []
+    this.$store.dispatch(CONSTANT.GET_CATEGORY_LIST)
   },
   methods: {
-    showScheduleTemplateLayer() {
+    showEditScheduleTemplateLayer(templateId) {
+      const [template] = L.take(
+        1,
+        L.filter(template => template._id === templateId, this.aTemplate)
+      )
+      this.$store.commit(CONSTANT.UPDATE_TEMPLATE, template)
+      this.isShow = true
+      this.templateType = 'edit'
+    },
+    showRegistScheduleTemplateLayer() {
       this.$store.commit(CONSTANT.INIT_PROGRAM, CONSTANT.DEFAULT_TEMPLATE_COUNT)
       this.isShow = true
+      this.templateType = 'new'
     }
   }
 }
@@ -55,7 +70,7 @@ ul.template-list {
   list-style:none;
   margin:0;
   padding:0;
-  float: left;
+  float: right;
 }
 .template-list li {
   display: inline-block;

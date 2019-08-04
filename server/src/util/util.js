@@ -18,7 +18,6 @@ const find = async (model, query, projection = {}) => {
 
 const findById = async (model, id, projection = {}) => {
   try {
-    console.log(id);
     const result = await model.findById(id, projection);
     return { success: true, data: { result } };
   } catch (error) {
@@ -26,8 +25,18 @@ const findById = async (model, id, projection = {}) => {
   }
 };
 
+const findByIdAndUpdate = async (model, id, update, option = {}) => {
+  try {
+    const result = await model.findByIdAndUpdate(id, update, option);
+    return { success: true, data: { result } };
+  } catch (error) {
+    return { success: false, data: { error } };
+  } 
+};
+
 module.exports = {
   save,
   find,
-  findById
+  findById,
+  findByIdAndUpdate
 };
