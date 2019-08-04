@@ -1,5 +1,7 @@
+import cloneDeep from 'lodash/cloneDeep'
+
 export default {
-  getName(state) {
-    return '[Getters] ' + state.name
+  cloneTemplate(state) {
+    return cloneDeep(state.template)
   }
 }

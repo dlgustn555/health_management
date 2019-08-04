@@ -25,30 +25,20 @@ module.exports = {
   /*
   ** Global CSS
   */
-  css: [
-    'bootstrap/dist/css/bootstrap.css',
-    'bootstrap-vue/dist/bootstrap-vue.css',
-    'swiper/dist/css/swiper.css'
-  ],
+  css: ['swiper/dist/css/swiper.css'],
 
   /*
   ** Plugins to load before mounting the App
   */
   plugins: [
-    { src: '~/plugins/vue-rx', ssr: false },
-    { src: '~/plugins/vue-awesome-swiper', ssr: false }
+    { src: '@/plugins/vue-rx', ssr: false },
+    { src: '@/plugins/vue-awesome-swiper', ssr: false }
   ],
 
   /*
   ** Nuxt.js modules
   */
-  modules: [
-    // Doc: https://github.com/nuxt-community/axios-module#usage
-    '@nuxtjs/axios',
-    // Doc: https://bootstrap-vue.js.org/docs/
-    'bootstrap-vue/nuxt',
-    'nuxt-device-detect'
-  ],
+  modules: ['@nuxtjs/axios', 'nuxt-device-detect'],
   /*
   ** Axios module configuration
   */
@@ -58,7 +48,7 @@ module.exports = {
   },
 
   proxy: {
-    '/health': {
+    '/exercise': {
       target: 'http://local-health.lhs.com:1702',
       changeOrigin: true
     }

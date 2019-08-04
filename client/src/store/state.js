@@ -1,3 +1,5 @@
 export default () => ({
-  name: 'Lee HyunSu'
+  login: true,
+  userId: '',
+  template: {}
 })

@@ -1,101 +1,82 @@
 <template>
   <div>
-    <b-container fluid>
-      <b-row class="m-1">
-        <label for="name">{{ once }}일차</label> :
-        <b-col sm="4">
-          <b-form-input
-            id="name"
-            v-model="program"
-            type="text"
-            size="sm"
-            placeholder="(ex) 가슴/등/어깨.." />
-        </b-col>
-      </b-row>
-      <div style="position:relative; overflow-y:auto; height:425px; padding-bottom:20px;">
-        <b-row
-          v-for="(program, index) in aProgram"
-          :key="index"
-          class="m-2">
-          <b-col sm="4">
-            <b-form-input
-              v-model="program.name"
-              type="text"
-              size="sm"
-              placeholder="(ex) 벤치 프레스" />
-          </b-col>
-          총
-          <b-col sm="2">
-            <b-form-select
-              v-model="program.count"
-              size="sm">
-              <option
-                v-for="set in 10"
-                :key="set"
-                :value="set">{{ set }}</option>
-            </b-form-select>
-          </b-col>
-          <b-col sm="2">
-            <b-form-select
-              v-model="program.unit"
-              size="sm">
-              <option
-                v-for="unit in UNIT"
-                :key="unit"
-                :value="unit">{{ unit }}</option>
-            </b-form-select>
-          </b-col>
-          <b-button
-            variant="light"
-            size="sm"
-            @click="deleteProgram(index)">X</b-button>
-        </b-row>
-        <b-row class="m-1">
-          <b-col sm="8">
-            <b-button
-              block
-              variant="outline-primary"
-              @click="addProgram">+ 추가하기</b-button>
-          </b-col>
-        </b-row>
-      </div>
-    </b-container>
+    <div class="field">
+      <label><span>♣</span> {{ program.order }} 일차 프로그램</label>
+      :
+      <input
+        v-model="program.part"
+        placeholder=" 가슴 / 등 / 하체"
+        type="text"
+        @input="inputPartFiled">
+      <button>x</button>
+    </div>
+    <div
+      v-for="(template, index) in program.templates"
+      :key="`template_${index}`"
+      :class="`template_field ${index % 2 ? 'even' : 'odd'}`">
+      <input
+        v-model="template.name"
+        placeholder=" 벤치 프레스"
+        type="text"
+        @input="inputTemplateFiled('name', index, $event)">
+      :
+      <span>총</span>
+      <input
+        v-model="template.set"
+        @input="inputTemplateFiled('set', index, $event)"
+      >
+      <select
+        v-model="template.unit"
+        @change="inputTemplateFiled('unit', index, $event)">
+        <option
+          v-for="(unit, index) in UNIT"
+          :key="`unit_${index}`">
+          {{ unit }}
+        </option>
+      </select>
+      <button>+</button>
+      <button>-</button>
+      <button>X</button>
+    </div>
   </div>
 </template>
+
 <script>
+import CONSTANT from '@/common/constant'
+
 export default {
   name: 'ScheduleTemplateForm',
   props: {
-    once: {
-      type: Number,
+    program: {
+      type: Object,
       required: true,
-      default: 1
+      default: null
     }
   },
   data() {
     return {
-      UNIT: ['Set', 'Km', 'Hour', 'Min', 'Sec'],
-      DEFAULT_PROGRAM: 9,
-      program: '',
-      oProgram: {
-        name: '',
-        count: 1,
-        unit: 'Set'
-      },
-      aProgram: [],
-      set: 1
+      UNIT: CONSTANT.UNIT
     }
   },
-  created() {
-    this.initTemplateForm()
-  },
   methods: {
+    inputPartFiled({ target }) {
+      this.program.part = target.value
+      this.$store.commit(CONSTANT.UPDATE_PROGRAM, this.program)
+    },
+
+    inputTemplateFiled(property, index, { target }) {
+      this.program.templates[index][property] = target.value
+      this.$store.commit(CONSTANT.UPDATE_PROGRAM, this.program)
+    },
+
     deleteProgram(index) {
       this.aProgram.splice(index, 1)
     },
+
     addProgram() {
       this.aProgram.push({ ...this.oProgram })
     },
+
     initTemplateForm() {
       this.aProgram = []
       for (let i = 0; i < this.DEFAULT_PROGRAM; i++) {
@@ -105,3 +86,15 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.template_field {
+  padding: 10px 5px;
+}
+.template_field.odd {
+  background-color: rgba(162, 233, 255, 0.3);
+}
+.template_field.even {
+  background-color: rgba(162, 201, 255, 0.3);
+}
+</style>

@@ -1,5 +1,12 @@
+import CONSTANT from '@/common/constant'
+import API from '@/common/api'
+
 export default {
-  ['TEST'](store) {
-    store.commit('TEST', '[Actions] Change!!!')
+  async [CONSTANT.REGIST_TEMPLATE]({ getters }) {
+    const { data } = await this.$axios.post(
+      API.REGIST_TEMPLATE,
+      getters.cloneTemplate
+    )
+    return data
   }
 }
