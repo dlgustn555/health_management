@@ -5,9 +5,11 @@
   "license": "MIT",
   "scripts": {
     "dev:blog": "nodemon --watch react-blog/backend/src/ react-blog/backend/src/index.js",
+    "dev:home": "cross-env MODE_ENV=home nodemon --watch src/ src/index.js",
     "dev": "nodemon --watch src/ src/index.js"
   },
   "dependencies": {
+    "cross-env": "^5.2.0",
     "koa": "^2.6.2",
     "koa-bodyparser": "^4.2.1",
     "koa-router": "^7.4.0",
