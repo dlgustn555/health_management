@@ -18,6 +18,7 @@
             @click.prevent="showEditScheduleTemplateLayer(template._id)">
             {{ template.category }}
           </a>
+          <button>x</button>
         </li>
       </ul>
     </div>
