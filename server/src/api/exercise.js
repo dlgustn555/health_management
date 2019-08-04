@@ -13,7 +13,6 @@ router.get('/', (ctx) => {
 
 // 템플릿 등록
 router.post('/template/:userId', async (ctx) => {
-  console.log(ctx.params, ctx.request.body);
   const { userId } = ctx.params;
   const modDate = new Date();
   const template = new Template({ userId, ...ctx.request.body, modDate });

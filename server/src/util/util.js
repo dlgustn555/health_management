@@ -1,4 +1,3 @@
-
 const save = async (model) => {
   try {
     const { _id } = await model.save();
