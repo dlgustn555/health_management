@@ -4,7 +4,7 @@
       v-show="isShow"
       @hideLayer="isShow=false" />
     <div>
-      <ul>
+      <ul class="template-list">
         <li
           v-for="category in aCategory"
           :key="category._id">
@@ -12,7 +12,7 @@
         </li>
       </ul>
       <button @click="showScheduleTemplateLayer">
-        신규 템플릿+
+        템플릿 추가+
       </button>
       
     </div>
@@ -51,9 +51,16 @@ export default {
 </script>
 
 <style lang="css" scoped>
-ul {
-  border: 1px solid black;
-  display: inline;
+ul.template-list {
+  list-style:none;
+  margin:0;
+  padding:0;
+  float: left;
+}
+.template-list li {
+  display: inline-block;
+  padding: 0px 5px;
+  margin: 0px 3px;
 }
 button {
   float: right;
