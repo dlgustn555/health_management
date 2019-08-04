@@ -85,18 +85,11 @@ module.exports = {
 
   router: {
     extendRoutes(routes, resolve) {
-      routes.push(
-        {
-          name: '인트로화면(리스트)',
-          path: '*',
-          component: '~/pages/list.vue'
-        },
-        {
-          name: '샘플 코드용',
-          path: '/sample/:id?',
-          component: '~/pages/sample'
-        }
-      )
+      routes.push({
+        name: '스케줄 달력 조회 화면',
+        path: '*',
+        component: '~/pages/calendarPage.vue'
+      })
     }
   }
 }
