@@ -24,7 +24,7 @@ export default {
   fetch({ store }) {
     store.commit(CONSTANT.SET_LOGIN_INFO, { login: true, userId: 'dlgustn555' })
     store.commit(CONSTANT.SET_CALENDAR)
-    store.commit(CONSTANT.SET_SCHEDULE)
+    store.dispatch(CONSTANT.SET_CALENDAR_SCHEDULE)
   },
   data() {
     return {}
@@ -40,6 +40,7 @@ export default {
 .content {
   margin: auto;
   width: 95%;
+  min-width: 1450px;
 }
 
 div.layer {
@@ -78,5 +79,20 @@ div.layer .content {
 
 .field {
   margin: 10px 0px;
+}
+.category_button {
+  margin: 0px 2px;
+  text-decoration: none;
+  padding: 3px 7px;
+  border-radius: 20px;
+  color: black;
+  font-weight: bold;
+  border: 1px solid #3ac1a4;
+}
+.category_button.fill {
+  background: #3ac1a4;
+}
+.category_button:hover {
+  cursor: pointer;
 }
 </style>

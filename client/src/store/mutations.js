@@ -51,7 +51,7 @@ export default {
   },
 
   // 템플릿 리스트 수정
-  [CONSTANT.SET_CATEGORY_LIST](state, aTemplate) {
+  [CONSTANT.SET_TEMPLATE_LIST](state, aTemplate) {
     state.aTemplate = aTemplate
   },
 
@@ -84,14 +84,17 @@ export default {
 
   // 스케줄 정보 셋팅
   [CONSTANT.SET_SCHEDULE](state) {
-    const { calendar } = state
+    const { calendar, aSchedule, aTemplate } = state
+
     state.aSchedule = Array.apply(
       null,
       Array(calendar.MAX_ROW * calendar.MAX_CELL)
     ).map((_, index) => {
       const oCellDate = {
         date: 0,
-        isShow: false
+        day: index % calendar.MAX_CELL,
+        isShow: false,
+        aTemplate: []
       }
 
       if (index === 0 && index === calendar.startDay) {
@@ -101,6 +104,12 @@ export default {
         oCellDate.date = index - calendar.startDay + 1
         oCellDate.isShow = oCellDate.date <= calendar.lastDate
       }
+
+      oCellDate.aTemplate = aTemplate.map(({ category }) => {
+        return {
+          category
+        }
+      })
       return { index, oCellDate }
     })
   }

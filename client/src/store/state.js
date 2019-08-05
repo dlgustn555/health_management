@@ -14,5 +14,16 @@ export default () => ({
     MAX_CELL: 7,
     START_DAY: 'SUNDAY'
   },
-  aSchedule: []
+  aSchedule: [
+    {
+      _id: '템플릿ID',
+      category: '웨이트',
+      schedules: []
+    },
+    {
+      _id: '템플릿ID',
+      category: '복싱',
+      schedules: []
+    }
+  ]
 })

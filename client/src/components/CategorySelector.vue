@@ -1,6 +1,6 @@
 <template>
   <div class="category-selector">
-    <schedule-template-layer
+    <template-layer
       v-show="isShow"
       :template-type="templateType"
       @hideLayer="isShow=false" />
@@ -14,7 +14,7 @@
           :key="template._id">
           <a
             href="#"
-            title="수정"
+            class="category_button fill"
             @click.prevent="showEditScheduleTemplateLayer(template._id)">
             {{ template.category }}
           </a>
@@ -30,11 +30,11 @@ import { mapState } from 'vuex'
 import API from '@/common/api'
 import CONSTANT from '@/common/constant'
 import L from '@/common/lazy'
-import ScheduleTemplateLayer from '@/components/layer/ScheduleTemplateLayer.vue'
+import TemplateLayer from '@/components/layer/TemplateLayer.vue'
 
 export default {
   name: 'CategorySelector',
-  components: { ScheduleTemplateLayer },
+  components: { TemplateLayer },
   data() {
     return {
       isShow: false,
@@ -45,7 +45,7 @@ export default {
     ...mapState(['userId', 'aTemplate'])
   },
   async created() {
-    this.$store.dispatch(CONSTANT.GET_CATEGORY_LIST)
+    this.$store.dispatch(CONSTANT.GET_TEMPLATE_LIST)
   },
   methods: {
     showEditScheduleTemplateLayer(templateId) {

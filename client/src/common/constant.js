@@ -23,9 +23,11 @@ export default {
   REGIST_TEMPLATE: 'registTemplate',
   MODIFY_TEMPLATE: 'modifyTemplate',
   UPDATE_TEMPLATE: 'updateTemplate',
-  GET_CATEGORY_LIST: 'getCategoryList',
-  SET_CATEGORY_LIST: 'setCategoryList',
+  GET_TEMPLATE_LIST: 'getTemplateList',
+  SET_TEMPLATE_LIST: 'setTemplateList',
 
   SET_CALENDAR: 'setCalendar',
+  SET_CALENDAR_SCHEDULE: 'setCalendarSchedule',
+  SET_CATEGORY_LIST: 'setCategoryList',
   SET_SCHEDULE: 'setSchedule'
 }

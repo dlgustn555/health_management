@@ -1,5 +1,9 @@
 <template>
   <div>
+    <schedule-layer
+      v-if="isShow"
+      :o-cell-date="oCellDate"
+      @hideLayer="isShow=false" />
     <div class="week week_head">
       <div
         v-for="(day, index) in DAYS.START_SUNDAY"
@@ -16,8 +20,20 @@
         v-for="({ index, oCellDate }, cellIndex) in getWeekSchedule(rowIndex)"
         :key="cellIndex"
         :class="oCellDate.date === calendar.todayDate && 'today'"
-        class="cell">
-        <span v-show="oCellDate.isShow">{{ oCellDate.date }}</span>
+        class="cell"
+        @click="registSchedule(oCellDate)">
+        <div v-show="oCellDate.isShow">
+          <span>{{ oCellDate.date }}</span>
+          <span
+            v-for="template in oCellDate.aTemplate"
+            :key="template._id">
+            <a
+              href="#"
+              class="category_button">
+              {{ template.category }}
+            </a>
+          </span>
+        </div>
       </div>
     </div>
   </div>
@@ -26,20 +42,32 @@
 <script>
 import { mapState } from 'vuex'
 import CONTANT from '@/common/constant'
+import ScheduleLayer from '@/components/layer/ScheduleLayer.vue'
 
 export default {
   name: 'Calendar',
+  components: { ScheduleLayer },
   data() {
     return {
-      DAYS: CONTANT.DAYS
+      DAYS: CONTANT.DAYS,
+      isShow: false,
+      oCellDate: null
     }
   },
-  computed: mapState(['calendar', 'aSchedule']),
+  computed: mapState(['calendar', 'aSchedule', 'aTemplate']),
   methods: {
     getWeekSchedule(rowIndex) {
       const begin = rowIndex * this.calendar.MAX_CELL
       const end = begin + this.calendar.MAX_CELL
       return this.aSchedule.slice(begin, end)
+    },
+
+    registSchedule(oCellDate) {
+      if (!oCellDate.isShow) {
+        return
+      }
+      this.isShow = true
+      this.oCellDate = oCellDate
     }
   }
 }

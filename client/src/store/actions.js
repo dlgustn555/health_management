@@ -15,9 +15,16 @@ export default {
     return data
   },
 
-  async [CONSTANT.GET_CATEGORY_LIST]({ state, commit }) {
-    const { data } = await this.$axios.get(API.GET_CATEGORY_LIST(state.userId))
+  async [CONSTANT.GET_TEMPLATE_LIST]({ state, commit }) {
+    const { data } = await this.$axios.get(API.GET_TEMPLATE_LIST(state.userId))
     const aTemplate = data.success ? data.data.aResult : []
-    commit(CONSTANT.SET_CATEGORY_LIST, aTemplate)
+    commit(CONSTANT.SET_TEMPLATE_LIST, aTemplate)
+  },
+
+  [CONSTANT.SET_CALENDAR_SCHEDULE]({ commit }) {
+    // 1. API를 호출해서 schedule 정보를 조회하여 세팅한다.
+
+    // 2. 스케줄 정보를 셋팅한다.
+    commit(CONSTANT.SET_SCHEDULE)
   }
 }

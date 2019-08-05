@@ -92,7 +92,7 @@ import CONSTANT from '@/common/constant'
 import ScheduleTemplateForm from '@/components/form/ScheduleTemplateForm.vue'
 
 export default {
-  name: 'ScheduleTemplateLayer',
+  name: 'TemplateLayer',
   components: { ScheduleTemplateForm },
   props: {
     templateType: {
