@@ -2,6 +2,7 @@
   <div class="content">
     <calendar-date-selector />
     <category-selector />
+    <calendar-schedule />
   </div>
 </template>
 
@@ -9,6 +10,7 @@
 import CONSTANT from '@/common/constant'
 import CalendarDateSelector from '@/components/CalendarDateSelector.vue'
 import CategorySelector from '@/components/CategorySelector.vue'
+import CalendarSchedule from '@/components/CalendarSchedule.vue'
 
 export default {
   layout({ isMobile }) {
@@ -16,10 +18,13 @@ export default {
   },
   components: {
     CalendarDateSelector,
-    CategorySelector
+    CategorySelector,
+    CalendarSchedule
   },
   fetch({ store }) {
     store.commit(CONSTANT.SET_LOGIN_INFO, { login: true, userId: 'dlgustn555' })
+    store.commit(CONSTANT.SET_CALENDAR)
+    store.commit(CONSTANT.SET_SCHEDULE)
   },
   data() {
     return {}

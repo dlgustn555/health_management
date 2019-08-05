@@ -80,10 +80,7 @@ export default {
         MONDAY: 'monday',
         SUNDAY: 'sunday'
       },
-      DAYS: {
-        monday: ['월', '화', '수', '목', '금', '토', '일'],
-        sunday: ['일', '월', '화', '수', '목', '금', '토']
-      },
+      
       oDate: new Date(),
       modal: {
         create: false
@@ -136,6 +133,7 @@ export default {
     changeMonth(status) {
       this.oDate = this._getDateByMonth(status)
     },
+    
     getWeekSchedules(weekIndex, status) {
       const {
         year,
@@ -175,6 +173,8 @@ export default {
       }
       return weekSchedules
     },
+
+
     _getSchedules(status) {
       const oDate = this._getDateByMonth(status)
       const oDateOtion = this._getDateOption(oDate, status)
@@ -190,6 +190,7 @@ export default {
         }
       })
     },
+
     _getDateOption(oDate, status) {
       const year = oDate.getFullYear()
       const month = oDate.getMonth()

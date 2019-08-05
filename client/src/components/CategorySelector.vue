@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="category-selector">
     <schedule-template-layer
       v-show="isShow"
       :template-type="templateType"
@@ -67,6 +67,10 @@ export default {
 </script>
 
 <style lang="css" scoped>
+.category-selector {
+  height: auto;
+  min-height: 50px;
+}
 ul.template-list {
   list-style:none;
   margin:0;

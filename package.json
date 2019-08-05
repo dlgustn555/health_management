@@ -1,0 +1,10 @@
+{
+  "name": "health",
+  "version": "1.0.0",
+  "scripts": {
+    "client:dev": "cd client && yarn dev",
+
+    "server:dev:home": "cd server && yarn dev:home",
+    "server:dev": "cd server && yarn dev"
+  }
+}

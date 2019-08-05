@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="calendar-date-selector">
     <h1>CalendarDateSelector</h1>
   </div>
 </template>
@@ -10,5 +10,8 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="css" scoped>
+.calendar-date-selector {
+  height: 100px;
+}
 </style>
