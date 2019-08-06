@@ -3,9 +3,13 @@
     <div class="dimmd" />
     <div class="content">
       <div class="field">
-        <h3>{{ calendar.year }}. {{ calendar.month + 1 }}. {{ oCellDate.date }}. {{ DAYS[oCellDate.day] }}요일.</h3>
+        <h5>{{ oToDay.year }}. {{ oToDay.month + 1 }}. {{ oCellDate.date }}. {{ DAYS[oCellDate.day].name }}요일.</h5>
+        <div class="field">
+          <h3>♣ 프로그램 1일차 - 가슴 ♣</h3>
+        </div>
       </div>
-      <div>
+
+      <div class="field_button">
         <button>등록</button>
         <button @click="$emit('hideLayer')">닫기</button>
       </div>
@@ -30,9 +34,13 @@ export default {
       DAYS: CONSTANT.DAYS.START_SUNDAY
     }
   },
-  computed: mapState(['calendar'])
+  computed: mapState(['oToDay'])
 }
 </script>
 
 <style lang="css" scoped>
+.content {
+  min-width: 800px;
+  max-width: 800px;
+}
 </style>

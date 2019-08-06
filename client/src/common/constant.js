@@ -1,11 +1,26 @@
 export default {
   MAX_COLS: 7,
   DAYS: {
-    START_MONDAY: ['월', '화', '수', '목', '금', '토', '일'],
-    START_SUNDAY: ['일', '월', '화', '수', '목', '금', '토']
+    START_MONDAY: [
+      { name: '월', value: 1 },
+      { name: '화', value: 2 },
+      { name: '수', value: 3 },
+      { name: '목', value: 4 },
+      { name: '금', value: 5 },
+      { name: '토', value: 6 },
+      { name: '일', value: 0 }
+    ],
+    START_SUNDAY: [
+      { name: '일', value: 0 },
+      { name: '월', value: 1 },
+      { name: '화', value: 2 },
+      { name: '수', value: 3 },
+      { name: '목', value: 4 },
+      { name: '금', value: 5 },
+      { name: '토', value: 6 }
+    ]
   },
   DAY_PER_MONTHS: [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
-  DAY_OF_WEEK: ['월', '화', '수', '목', '금', '토', '일'],
   DEFAULT_TEMPLATE_COUNT: 8,
   TEMPLATE: { name: '', set: 1, unit: 'Set' },
   UNIT: ['Set', 'Km', 'Hour', 'Min', 'Sec'],
@@ -26,8 +41,11 @@ export default {
   GET_TEMPLATE_LIST: 'getTemplateList',
   SET_TEMPLATE_LIST: 'setTemplateList',
 
-  SET_CALENDAR: 'setCalendar',
-  SET_CALENDAR_SCHEDULE: 'setCalendarSchedule',
+  SET_TODAY: 'SetToday',
+  SET_SCHEDULE_OF_CALENDAR: 'setScheduleOfCalendar',
   SET_CATEGORY_LIST: 'setCategoryList',
-  SET_SCHEDULE: 'setSchedule'
+  SET_CALENDAR_DATE_LIST: 'setCalendarDateList',
+  SET_SCHEDULE_OF_CALEDAR: 'setScheduleOfCaledar',
+
+  _SET_CELL_DATE_OF_SCHEDULE: '_setCellDateOfTemplate'
 }

@@ -21,10 +21,86 @@ export default {
     commit(CONSTANT.SET_TEMPLATE_LIST, aTemplate)
   },
 
-  [CONSTANT.SET_CALENDAR_SCHEDULE]({ commit }) {
-    // 1. API를 호출해서 schedule 정보를 조회하여 세팅한다.
+  async [CONSTANT.SET_SCHEDULE_OF_CALENDAR]({ state, commit, dispatch }) {
+    const { oToDay } = state
 
-    // 2. 스케줄 정보를 셋팅한다.
-    commit(CONSTANT.SET_SCHEDULE)
+    // 1. API를 호출해서 schedule 정보를 조회하여 세팅한다.
+    const registSchedule = []
+    const lastRegistSchedule = registSchedule.map(schedule => {
+      const [lastScedule] = schedule.filter(schedule => schedule).reverse()
+      return lastScedule
+    })
+
+    // 2. 해당 월의 날짜 정보를 셋팅한다.
+    const aCalendarDate = Array.apply(
+      null,
+      Array(oToDay.MAX_ROW * oToDay.MAX_CELL)
+    ).map((_, cellIndex) => {
+      const oCellDate = {
+        date: 0,
+        day: cellIndex % oToDay.MAX_CELL,
+        isShow: false,
+        aSchedule: []
+      }
+
+      // Step 1: 날짜 정보 셋팅
+      if (cellIndex === 0 && cellIndex === oToDay.startDay) {
+        oCellDate.date = 1
+        oCellDate.isShow = true
+      } else if (cellIndex >= oToDay.startDay) {
+        oCellDate.date = cellIndex - oToDay.startDay + 1
+        oCellDate.isShow = oCellDate.date <= oToDay.lastDate
+      }
+
+      // Step 2: 날짜의 스캐줄 정보를 셋팅
+      dispatch(CONSTANT._SET_CELL_DATE_OF_SCHEDULE, {
+        cellIndex,
+        oCellDate,
+        registSchedule,
+        lastRegistSchedule
+      })
+
+      return oCellDate
+    })
+
+    commit(CONSTANT.SET_CALENDAR_DATE_LIST, aCalendarDate)
+  },
+
+  // 날짜의 스캐줄 정보를 셋팅
+  [CONSTANT._SET_CELL_DATE_OF_SCHEDULE](
+    { state },
+    { cellIndex, oCellDate, registSchedule, lastRegistSchedule }
+  ) {
+    const { aTemplate, oToDay } = state
+    const isFillCategoryButton = !!registSchedule[cellIndex]
+    let isShowDateField =
+      oCellDate.date >= oToDay.todayDate || !!registSchedule[cellIndex]
+
+    oCellDate.aSchedule = aTemplate.map(({ _id, category, days, programs }) => {
+      isShowDateField =
+        isShowDateField && days.some(day => day === oCellDate.day)
+
+      let nextOrder = 0
+      lastRegistSchedule.some(({ templateId, order }) => {
+        if (templateId === _id) {
+          nextOrder = order
+        }
+        return templateId === _id
+      })
+
+      if (isShowDateField) {
+        nextOrder += (oCellDate.date - oToDay.todayDate) % programs.length
+
+        category += isFillCategoryButton
+          ? `-${registSchedule[cellIndex].part}`
+          : `-${programs[nextOrder].part}`
+      }
+
+      return {
+        isShow: isShowDateField,
+        isFill: isFillCategoryButton,
+        category
+      }
+    })
   }
 }

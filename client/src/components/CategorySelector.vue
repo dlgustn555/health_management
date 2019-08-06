@@ -41,12 +41,7 @@ export default {
       templateType: 'new'
     }
   },
-  computed: {
-    ...mapState(['userId', 'aTemplate'])
-  },
-  async created() {
-    this.$store.dispatch(CONSTANT.GET_TEMPLATE_LIST)
-  },
+  computed: mapState(['userId', 'aTemplate']),
   methods: {
     showEditScheduleTemplateLayer(templateId) {
       const [template] = L.take(

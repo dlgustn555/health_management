@@ -1,14 +1,15 @@
 <template>
-  <div>
+  <div class="template-form">
     <div class="field">
       <label><span>♣</span> {{ program.order }} 일차 프로그램</label>
       :
       <input
         v-model="program.part"
-        placeholder=" 가슴 / 등 / 하체"
+        placeholder="가슴 / 등 / 하체"
         type="text"
         @input="inputPartFiled">
       <button>x</button>
+      <span>♣</span>
     </div>
     <div
       v-for="(template, index) in program.templates"
@@ -16,7 +17,7 @@
       :class="`template_field ${index % 2 ? 'even' : 'odd'}`">
       <input
         v-model="template.name"
-        placeholder=" 벤치 프레스"
+        placeholder="벤치 프레스"
         type="text"
         @input="inputTemplateFiled('name', index, $event)">
       :
@@ -96,5 +97,15 @@ export default {
 }
 .template_field.even {
   background-color: rgba(162, 201, 255, 0.3);
+}
+input {
+  padding-left: 10px;
+}
+select {
+  padding: 5px;
+}
+input,
+select {
+  height: 30px;
 }
 </style>

@@ -13,6 +13,7 @@ import CategorySelector from '@/components/CategorySelector.vue'
 import CalendarSchedule from '@/components/CalendarSchedule.vue'
 
 export default {
+  name: 'CalendarPage',
   layout({ isMobile }) {
     return isMobile ? 'default' : 'default'
   },
@@ -21,10 +22,11 @@ export default {
     CategorySelector,
     CalendarSchedule
   },
-  fetch({ store }) {
+  async fetch({ store }) {
     store.commit(CONSTANT.SET_LOGIN_INFO, { login: true, userId: 'dlgustn555' })
-    store.commit(CONSTANT.SET_CALENDAR)
-    store.dispatch(CONSTANT.SET_CALENDAR_SCHEDULE)
+    store.commit(CONSTANT.SET_TODAY)
+    await store.dispatch(CONSTANT.GET_TEMPLATE_LIST)
+    await store.dispatch(CONSTANT.SET_SCHEDULE_OF_CALENDAR)
   },
   data() {
     return {}
@@ -80,6 +82,9 @@ div.layer .content {
 .field {
   margin: 10px 0px;
 }
+.field_button {
+  padding-top: 30px;
+}
 .category_button {
   margin: 0px 2px;
   text-decoration: none;
@@ -92,7 +97,14 @@ div.layer .content {
 .category_button.fill {
   background: #3ac1a4;
 }
+.category_button.dotted {
+  border: 1px dotted #3ac1a4;
+}
 .category_button:hover {
   cursor: pointer;
+}
+.opacity_6 {
+  opacity: 0.6;
+  filter: alpha(opacity=0.6);
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div class="layer">
     <div class="dimmd" />
-    <div class="content">
+    <div class="content template-lyaer">
       <div class="field">
         <label><span>●</span> 운동타입</label>
         :
@@ -22,16 +22,16 @@
             for="day_checkbox_all">ALL</label>
         </span>
         <span
-          v-for="(day, index) in DAY_OF_WEEK"
+          v-for="({ name, value }, index) in DAYS.START_SUNDAY"
           :key="`day_${index}`"
           class="day_checkbox">
           <input
             :id="`day_checkbox_${index}`"
             v-model="days"
-            :value="day"
+            :value="value"
             type="checkbox">
           <label
-            :for="`day_checkbox_${index}`">{{ day }}</label>
+            :for="`day_checkbox_${index}`">{{ name }}</label>
         </span>
       </div>
       <div class="field">
@@ -103,7 +103,7 @@ export default {
   data() {
     return {
       isAll: false,
-      DAY_OF_WEEK: CONSTANT.DAY_OF_WEEK,
+      DAYS: CONSTANT.DAYS,
       days: [],
       programCnt: 1,
       swiperOption: {
@@ -143,7 +143,8 @@ export default {
 
     toggleDays() {
       const isCheckAll = !this.isAll
-      this.days = isCheckAll ? [...CONSTANT.DAY_OF_WEEK] : []
+      const allDays = this.DAYS.START_SUNDAY.map(({ value }) => value)
+      this.days = isCheckAll ? allDays : []
     },
 
     async modifyTemplate() {
@@ -178,6 +179,11 @@ export default {
 </script>
 
 <style scoped>
+.content.template-lyaer {
+  width: 810px;
+  min-width: 810px;
+  max-width: 810ox;
+}
 input {
   width: 50%;
 }
@@ -190,8 +196,5 @@ input {
 .day_checkbox input {
   width: 18px;
   height: 18px;
-}
-.field_button {
-  padding-top: 30px;
 }
 </style>

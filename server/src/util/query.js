@@ -31,12 +31,14 @@ const findByIdAndUpdate = async (model, id, update, option = {}) => {
     return { success: true, data: { result } };
   } catch (error) {
     return { success: false, data: { error } };
-  } 
+  }
 };
 
-module.exports = {
+const Query = {
   save,
   find,
   findById,
   findByIdAndUpdate
 };
+
+module.exports = Query;

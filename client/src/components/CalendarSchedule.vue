@@ -6,33 +6,37 @@
       @hideLayer="isShow=false" />
     <div class="week week_head">
       <div
-        v-for="(day, index) in DAYS.START_SUNDAY"
+        v-for="({ name }, index) in DAYS.START_SUNDAY"
         :key="index"
         class="cell_head">
-        <span>{{ day }}</span>
+        <span>{{ name }}</span>
       </div>
     </div>
     <div
-      v-for="(row, rowIndex) in calendar.MAX_ROW"
+      v-for="(row, rowIndex) in oToDay.MAX_ROW"
       :key="rowIndex"
       class="week">
       <div
-        v-for="({ index, oCellDate }, cellIndex) in getWeekSchedule(rowIndex)"
+        v-for="(oCellDate, cellIndex) in getWeekSchedule(rowIndex)"
         :key="cellIndex"
-        :class="oCellDate.date === calendar.todayDate && 'today'"
+        :class="oCellDate.date === oToDay.todayDate && 'today'"
         class="cell"
         @click="registSchedule(oCellDate)">
         <div v-show="oCellDate.isShow">
           <span>{{ oCellDate.date }}</span>
-          <span
-            v-for="template in oCellDate.aTemplate"
-            :key="template._id">
+          <div
+            v-for="schedule in oCellDate.aSchedule"
+            :key="schedule._id"
+            :class="{ opacity_6: !schedule.isFill }"
+            class="field">
             <a
+              v-show="schedule.isShow"
+              :class="schedule.isFill ? 'fill' : 'dotted'"
               href="#"
               class="category_button">
-              {{ template.category }}
+              {{ schedule.category }}
             </a>
-          </span>
+          </div>
         </div>
       </div>
     </div>
@@ -54,12 +58,12 @@ export default {
       oCellDate: null
     }
   },
-  computed: mapState(['calendar', 'aSchedule', 'aTemplate']),
+  computed: mapState(['oToDay', 'aCalendarDate', 'aTemplate']),
   methods: {
     getWeekSchedule(rowIndex) {
-      const begin = rowIndex * this.calendar.MAX_CELL
-      const end = begin + this.calendar.MAX_CELL
-      return this.aSchedule.slice(begin, end)
+      const begin = rowIndex * this.oToDay.MAX_CELL
+      const end = begin + this.oToDay.MAX_CELL
+      return this.aCalendarDate.slice(begin, end)
     },
 
     registSchedule(oCellDate) {

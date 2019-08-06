@@ -55,62 +55,34 @@ export default {
     state.aTemplate = aTemplate
   },
 
-  // 달력 정보 셋팅
-  [CONSTANT.SET_CALENDAR](state) {
-    const { calendar } = state
+  // 오늘 날짜 정보 셋팅
+  [CONSTANT.SET_TODAY](state) {
+    const { oToDay } = state
 
     const oDate = new Date()
-    calendar.year = oDate.getFullYear()
-    calendar.month = oDate.getMonth()
-    calendar.todayDate = oDate.getDate()
+    oToDay.year = oDate.getFullYear()
+    oToDay.month = oDate.getMonth()
+    oToDay.todayDate = oDate.getDate()
 
     const SUNDAY = 0
-    calendar.startDay = new Date(calendar.year, calendar.month, 1).getDay()
+    oToDay.startDay = new Date(oToDay.year, oToDay.month, 1).getDay()
     if (state.START_DAY_TYPE === 'MONDAY') {
-      calendar.startDay =
-        calendar.startDay === SUNDAY ? 6 : calendar.startDay - 1
+      oToDay.startDay = oToDay.startDay === SUNDAY ? 6 : oToDay.startDay - 1
     }
-    calendar.lastDate = CONSTANT.DAY_PER_MONTHS[calendar.month]
+    oToDay.lastDate = CONSTANT.DAY_PER_MONTHS[oToDay.month]
     if (
-      (calendar.month === 1 &&
-        (calendar.year % 100 !== 0 && calendar.year % 4 === 0)) ||
-      calendar.year % 400 === 0
+      (oToDay.month === 1 &&
+        (oToDay.year % 100 !== 0 && oToDay.year % 4 === 0)) ||
+      oToDay.year % 400 === 0
     ) {
-      calendar.lastDate += 1
+      oToDay.lastDate += 1
     }
 
-    calendar.MAX_ROW = Math.ceil((calendar.startDay + calendar.lastDate) / 7)
+    oToDay.MAX_ROW = Math.ceil((oToDay.startDay + oToDay.lastDate) / 7)
   },
 
-  // 스케줄 정보 셋팅
-  [CONSTANT.SET_SCHEDULE](state) {
-    const { calendar, aSchedule, aTemplate } = state
-
-    state.aSchedule = Array.apply(
-      null,
-      Array(calendar.MAX_ROW * calendar.MAX_CELL)
-    ).map((_, index) => {
-      const oCellDate = {
-        date: 0,
-        day: index % calendar.MAX_CELL,
-        isShow: false,
-        aTemplate: []
-      }
-
-      if (index === 0 && index === calendar.startDay) {
-        oCellDate.date = 1
-        oCellDate.isShow = true
-      } else if (index >= calendar.startDay) {
-        oCellDate.date = index - calendar.startDay + 1
-        oCellDate.isShow = oCellDate.date <= calendar.lastDate
-      }
-
-      oCellDate.aTemplate = aTemplate.map(({ category }) => {
-        return {
-          category
-        }
-      })
-      return { index, oCellDate }
-    })
+  // 스케줄 정보를 셋팅
+  [CONSTANT.SET_CALENDAR_DATE_LIST](state, aCalendarDate) {
+    state.aCalendarDate = aCalendarDate
   }
 }

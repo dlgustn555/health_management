@@ -1,8 +1,8 @@
 const Router = require('koa-router');
-const exercise = require('./exercise');
+const template = require('./template');
 
 const router = new Router();
 
-router.use('/exercise', exercise);
+router.use('/exercise/template', template);
 
 module.exports = router.routes();
