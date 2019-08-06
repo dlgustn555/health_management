@@ -21,8 +21,7 @@
         v-for="(oCellDate, cellIndex) in getWeekSchedule(rowIndex)"
         :key="cellIndex"
         :class="oCellDate.date === oToDay.todayDate && 'today'"
-        class="cell"
-        @click.prevent="registSchedule(oCellDate)">
+        class="cell">
         <div v-show="oCellDate.isShow">
           <span>{{ oCellDate.date }}</span>
           <div
