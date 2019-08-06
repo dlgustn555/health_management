@@ -100,11 +100,27 @@ div.layer .content {
 .category_button.dotted {
   border: 1px dotted #3ac1a4;
 }
+
+.category_button.dotted:hover {
+  border: 2px solid #3ac1a4;
+  padding: 2px 6px;
+}
+
 .category_button:hover {
   cursor: pointer;
 }
 .opacity_6 {
   opacity: 0.6;
   filter: alpha(opacity=0.6);
+}
+input {
+  padding-left: 10px;
+}
+select {
+  padding: 5px;
+}
+input,
+select {
+  height: 30px;
 }
 </style>

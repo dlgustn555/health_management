@@ -24,14 +24,18 @@
       <span>총</span>
       <input
         v-model="template.set"
+        type="number"
+        min="1"
         @input="inputTemplateFiled('set', index, $event)"
       >
+      <span>Set</span>
       <select
         v-model="template.unit"
         @change="inputTemplateFiled('unit', index, $event)">
         <option
           v-for="(unit, index) in UNIT"
-          :key="`unit_${index}`">
+          :key="`unit_${index}`"
+          :value="unit">
           {{ unit }}
         </option>
       </select>
@@ -66,7 +70,8 @@ export default {
     },
 
     inputTemplateFiled(property, index, { target }) {
-      this.program.templates[index][property] = target.value
+      this.program.templates[index][property] =
+        property === 'set' ? parseInt(target.value, 10) : target.value
       this.$store.commit(CONSTANT.UPDATE_PROGRAM, this.program)
     },
 
@@ -97,15 +102,5 @@ export default {
 }
 .template_field.even {
   background-color: rgba(162, 201, 255, 0.3);
-}
-input {
-  padding-left: 10px;
-}
-select {
-  padding: 5px;
-}
-input,
-select {
-  height: 30px;
 }
 </style>

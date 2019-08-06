@@ -13,5 +13,10 @@ export default {
         break
       }
     }
+  },
+  map: function*(f, iter) {
+    for (const item of iter) {
+      yield f(item)
+    }
   }
 }

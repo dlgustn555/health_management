@@ -3,6 +3,7 @@
     <schedule-layer
       v-if="isShow"
       :o-cell-date="oCellDate"
+      :schedule="schedule"
       @hideLayer="isShow=false" />
     <div class="week week_head">
       <div
@@ -21,7 +22,7 @@
         :key="cellIndex"
         :class="oCellDate.date === oToDay.todayDate && 'today'"
         class="cell"
-        @click="registSchedule(oCellDate)">
+        @click.prevent="registSchedule(oCellDate)">
         <div v-show="oCellDate.isShow">
           <span>{{ oCellDate.date }}</span>
           <div
@@ -33,8 +34,9 @@
               v-show="schedule.isShow"
               :class="schedule.isFill ? 'fill' : 'dotted'"
               href="#"
-              class="category_button">
-              {{ schedule.category }}
+              class="category_button"
+              @click.prevent.stop="registScheduleFromCategory(oCellDate, schedule)">
+              {{ schedule.category }}{{ schedule.part ? ` - ${schedule.part}` : '' }}
             </a>
           </div>
         </div>
@@ -55,7 +57,8 @@ export default {
     return {
       DAYS: CONTANT.DAYS,
       isShow: false,
-      oCellDate: null
+      oCellDate: null,
+      schedule: null
     }
   },
   computed: mapState(['oToDay', 'aCalendarDate', 'aTemplate']),
@@ -67,11 +70,20 @@ export default {
     },
 
     registSchedule(oCellDate) {
+      if (!oCellDate.isShow || oCellDate.date > this.oToDay.todayDate) {
+        return
+      }
+      this.isShow = true
+      this.oCellDate = oCellDate
+    },
+
+    registScheduleFromCategory(oCellDate, schedule = null) {
       if (!oCellDate.isShow) {
         return
       }
       this.isShow = true
       this.oCellDate = oCellDate
+      this.schedule = schedule
     }
   }
 }

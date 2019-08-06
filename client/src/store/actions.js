@@ -88,18 +88,26 @@ export default {
         return templateId === _id
       })
 
-      if (isShowDateField) {
+      if (oCellDate.date >= oToDay.todayDate) {
         nextOrder += (oCellDate.date - oToDay.todayDate) % programs.length
-
-        category += isFillCategoryButton
-          ? `-${registSchedule[cellIndex].part}`
-          : `-${programs[nextOrder].part}`
       }
+
+      const part = isFillCategoryButton
+        ? registSchedule[cellIndex].part
+        : programs[nextOrder].part
+
+      const order = isFillCategoryButton
+        ? registSchedule[cellIndex].order
+        : nextOrder + 1
 
       return {
         isShow: isShowDateField,
         isFill: isFillCategoryButton,
-        category
+        templateId: _id,
+        category,
+        part,
+        order,
+        data: registSchedule[cellIndex] || null
       }
     })
   }

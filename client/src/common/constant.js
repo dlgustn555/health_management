@@ -22,8 +22,8 @@ export default {
   },
   DAY_PER_MONTHS: [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
   DEFAULT_TEMPLATE_COUNT: 8,
-  TEMPLATE: { name: '', set: 1, unit: 'Set' },
-  UNIT: ['Set', 'Km', 'Hour', 'Min', 'Sec'],
+  TEMPLATE: { name: '', set: 1, unit: 'Kg' },
+  UNIT: ['Kg', 'Km', 'Hour', 'Min', 'Sec'],
   PROGRAM: {
     part: '',
     order: 1,
