@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const TemplateSchema = new mongoose.Schema({
   userId: { type: String, required: true },
-  category: { type: String, required: true },
+  tag: { type: String, required: true },
   days: { type: Array, require: true },
   programs: { type: Array, require: false },
   modDate: { type: Date, required: true }
