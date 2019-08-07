@@ -35,7 +35,7 @@
               href="#"
               class="category_button"
               @click.prevent.stop="registScheduleFromCategory(oCellDate, schedule)">
-              {{ schedule.category }}{{ schedule.part ? ` - ${schedule.part}` : '' }}
+              {{ schedule.tag }}{{ schedule.part ? ` - ${schedule.part}` : '' }}
             </a>
           </div>
         </div>

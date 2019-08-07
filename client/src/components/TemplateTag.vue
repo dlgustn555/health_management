@@ -1,7 +1,8 @@
 <template>
   <div class="category-selector">
     <template-layer
-      v-show="isShow"
+      v-if="isShow"
+      :template="template"
       :template-type="templateType"
       @hideLayer="isShow=false" />
     <div>
@@ -16,7 +17,7 @@
             href="#"
             class="category_button fill"
             @click.prevent="showEditScheduleTemplateLayer(template._id)">
-            {{ template.category }}
+            {{ template.tag }}
           </a>
           <button>x</button>
         </li>
@@ -29,15 +30,19 @@
 import { mapState } from 'vuex'
 import API from '@/common/api'
 import CONSTANT from '@/common/constant'
+import { createProgram } from '@/common'
+import cloneDeep from 'lodash/cloneDeep'
 import L from '@/common/lazy'
+
 import TemplateLayer from '@/components/layer/TemplateLayer.vue'
 
 export default {
-  name: 'CategorySelector',
+  name: 'TemplateTag',
   components: { TemplateLayer },
   data() {
     return {
       isShow: false,
+      template: null,
       templateType: 'new'
     }
   },
@@ -48,12 +53,18 @@ export default {
         1,
         L.filter(template => template._id === templateId, this.aTemplate)
       )
-      this.$store.commit(CONSTANT.UPDATE_TEMPLATE, template)
+      this.template = cloneDeep(template)
       this.isShow = true
       this.templateType = 'edit'
     },
+
     showRegistScheduleTemplateLayer() {
-      this.$store.commit(CONSTANT.INIT_PROGRAM, CONSTANT.DEFAULT_TEMPLATE_COUNT)
+      const [program] = createProgram(1, 1)
+      this.template = {
+        tag: '',
+        days: [],
+        programs: [program]
+      }
       this.isShow = true
       this.templateType = 'new'
     }

@@ -6,7 +6,7 @@
         <label><span>●</span> 운동타입</label>
         :
         <input
-          v-model="template.category"
+          :value="template.tag"
           placeholder=" 웨이트 / 헬스 / 요가 / 복싱"
           type="text"
           @input="inputCategoryField">
@@ -19,6 +19,7 @@
             type="checkbox"
             @click="toggleDays">
           <label
+            class="all"
             for="day_checkbox_all">ALL</label>
         </span>
         <span
@@ -26,8 +27,8 @@
           :key="`day_${index}`"
           class="day_checkbox">
           <input
+            v-model="template.days"
             :id="`day_checkbox_${index}`"
-            v-model="days"
             :value="value"
             type="checkbox">
           <label
@@ -37,9 +38,7 @@
       <div class="field">
         <span>●</span> 총
         <select
-          v-model="programCnt"
-          @change="changeProgramCount"
-        >
+          @change="changeProgramCount">
           <option
             v-for="count in 10"
             :key="`program_${count}`"
@@ -51,33 +50,27 @@
         <span
           v-for="{ order, part } in template.programs"
           :key="order">
-          {{ `${order === 1 ? '' : ', '}${part === '' ? '__' : part}` }}
+          {{ `${order === 1 ? '' : ', '}${part === '' ? '____' : part}` }}
         </span>
       </div>
+
       <div
-        v-swiper:createScheduleTemplateSwiper="swiperOption"
-        class="createScheduleTemplateSwiper field">
+        v-swiper:templateWriteFromSwiper="swiperOption"
+        class="templateWriteFromSwiper field">
         <div class="swiper-wrapper">
-          <schedule-template-form
+          <template-write-form
             v-for="(program, index) in template.programs"
-            ref="scheduleTemplateForm"
+            ref="templateForm"
             :key="`programForm_${index}`"
             :program="program"
             class="swiper-slide"
           />
         </div>
-        <div class="swiper-pagination" />
       </div>
+      <div class="swiper-pagination" />
       <div class="field_button">
-        <button 
-          v-if="templateType === 'new'"
-          @click="registTemplate">
-          등록
-        </button>
-        <button 
-          v-else
-          @click="modifyTemplate">
-          수정
+        <button @click="templateType ==='new' ? registTemplate() : modifyTemplate()">
+          {{ templateType === 'new' ? '등록' : '수정' }}
         </button>
         <button @click="closeLayer">닫기</button>
       </div>
@@ -86,15 +79,18 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import cloneDeep from 'lodash/cloneDeep'
 import CONSTANT from '@/common/constant'
-import ScheduleTemplateForm from '@/components/form/ScheduleTemplateForm.vue'
+import { createProgram } from '@/common'
+import TemplateWriteForm from '@/components/form/TemplateWriteForm.vue'
 
 export default {
   name: 'TemplateLayer',
-  components: { ScheduleTemplateForm },
+  components: { TemplateWriteForm },
   props: {
+    template: {
+      type: Object,
+      default: null
+    },
     templateType: {
       type: String,
       default: 'new'
@@ -104,8 +100,6 @@ export default {
     return {
       isAll: false,
       DAYS: CONSTANT.DAYS,
-      days: [],
-      programCnt: 1,
       swiperOption: {
         spaceBetween: 7,
         pagination: {
@@ -114,53 +108,41 @@ export default {
       }
     }
   },
-  computed: mapGetters({
-    template: 'cloneTemplate'
-  }),
   watch: {
-    days(newValue) {
+    'template.days'(newValue) {
       this.isAll = newValue.length === 7
-      this.template.days = this.days
-      this.$store.commit(CONSTANT.UPDATE_TEMPLATE, this.template)
     }
   },
   methods: {
-    changeProgramCount() {
-      const beforeCount = this.template.programs.length
-      const actionType =
-        this.programCnt > beforeCount ? this.addProgram : this.deleteProgram
-      actionType(this.programCnt - beforeCount)
+    toggleDays() {
+      this.isAll = !this.isAll
+      const allDays = this.DAYS.START_SUNDAY.map(({ value }) => value)
+      this.template.days = this.isAll ? allDays : []
     },
 
     inputCategoryField({ target }) {
-      this.template.category = target.value
-      this.$store.commit(CONSTANT.UPDATE_TEMPLATE, this.template)
+      this.template.tag = target.value
     },
 
-    addProgram(count) {
-      this.$store.commit(CONSTANT.ADD_PROGRAM, count)
-    },
-
-    toggleDays() {
-      const isCheckAll = !this.isAll
-      const allDays = this.DAYS.START_SUNDAY.map(({ value }) => value)
-      this.days = isCheckAll ? allDays : []
-    },
-
-    async modifyTemplate() {
-      const { data, success } = await this.$store.dispatch(
-        CONSTANT.MODIFY_TEMPLATE
-      )
-      const message = success
-        ? '수정되었습니다.'
-        : `수정에 실패했습니다.\n${data.error.message}`
-      alert(message)
-      this.closeLayer()
+    changeProgramCount({ target }) {
+      const newCount = target.value
+      const beforeCount = this.template.programs.length
+      const gap = newCount - beforeCount
+      if (gap > 0) {
+        const order = this.template.programs[beforeCount - 1].order + 1
+        const programs = createProgram(gap, order)
+        for (const program of programs) {
+          this.template.programs.push(program)
+        }
+      } else {
+        this.template.programs = this.template.programs.slice(0, gap)
+      }
     },
 
     async registTemplate() {
       const { data, success } = await this.$store.dispatch(
-        CONSTANT.REGIST_TEMPLATE
+        CONSTANT.REGIST_TEMPLATE,
+        this.template
       )
       const message = success
         ? '등록되었습니다.'
@@ -169,9 +151,19 @@ export default {
       this.closeLayer()
     },
 
+    async modifyTemplate() {
+      const { data, success } = await this.$store.dispatch(
+        CONSTANT.MODIFY_TEMPLATE,
+        this.template
+      )
+      const message = success
+        ? '수정되었습니다.'
+        : `수정에 실패했습니다.\n${data.error.message}`
+      alert(message)
+      this.closeLayer()
+    },
+
     closeLayer() {
-      this.programCnt = 1
-      this.$store.commit(CONSTANT.INIT_PROGRAM, 1)
       this.$emit('hideLayer')
     }
   }
@@ -187,7 +179,10 @@ export default {
 input {
   width: 50%;
 }
-.createScheduleTemplateSwiper {
+select {
+  padding: 5px;
+}
+.templateWriteFromSwiper {
   width: 100%;
 }
 .day_checkbox {
@@ -196,5 +191,13 @@ input {
 .day_checkbox input {
   width: 18px;
   height: 18px;
+}
+.day_checkbox label {
+  padding-right: 10px;
+  font-size: 17px;
+  font-weight: bold;
+}
+.day_checkbox label.all {
+  padding: 0;
 }
 </style>

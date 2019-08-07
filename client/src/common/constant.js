@@ -22,12 +22,12 @@ export default {
   },
   DAY_PER_MONTHS: [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
   DEFAULT_TEMPLATE_COUNT: 8,
-  TEMPLATE: { name: '', set: 1, unit: 'Kg' },
+  COURSE: { name: '', set: 1, unit: 'Kg' },
   UNIT: ['Kg', 'Km', 'Hour', 'Min', 'Sec'],
   PROGRAM: {
-    part: '',
     order: 1,
-    templates: []
+    part: '',
+    course: []
   },
 
   SET_LOGIN_INFO: '',
@@ -38,7 +38,9 @@ export default {
   REGIST_TEMPLATE: 'registTemplate',
   MODIFY_TEMPLATE: 'modifyTemplate',
   UPDATE_TEMPLATE: 'updateTemplate',
+
   GET_TEMPLATE_LIST: 'getTemplateList',
+  UPDATE_TEMPLATE_LIST: 'updateTemplateList',
   SET_TEMPLATE_LIST: 'setTemplateList',
 
   SET_TODAY: 'SetToday',

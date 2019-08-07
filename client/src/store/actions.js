@@ -2,16 +2,23 @@ import CONSTANT from '@/common/constant'
 import API from '@/common/api'
 
 export default {
-  async [CONSTANT.REGIST_TEMPLATE]({ state }) {
-    const { data } = await this.$axios.post(API.REGIST_TEMPLATE, state.template)
+  async [CONSTANT.REGIST_TEMPLATE]({ state, commit }, template) {
+    template.userId = state.userId
+    const { data } = await this.$axios.post(API.REGIST_TEMPLATE, template)
+    if (data.success) {
+      commit(CONSTANT.UPDATE_TEMPLATE_LIST, template)
+    }
     return data
   },
 
-  async [CONSTANT.MODIFY_TEMPLATE]({ state }) {
+  async [CONSTANT.MODIFY_TEMPLATE]({ commit }, template) {
     const { data } = await this.$axios.patch(
-      API.UPDATE_TEMPLATE(state.template._id),
-      state.template
+      API.UPDATE_TEMPLATE(template._id),
+      template
     )
+    if (data.success) {
+      commit(CONSTANT.UPDATE_TEMPLATE_LIST, template)
+    }
     return data
   },
 

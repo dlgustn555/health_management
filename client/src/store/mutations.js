@@ -8,51 +8,23 @@ export default {
     state.userId = userId
   },
 
-  // 템플릿 초기화
-  [CONSTANT.INIT_PROGRAM](state, limit) {
-    const program = cloneDeep(CONSTANT.PROGRAM)
-    for (let i = 0; i < limit; i++) {
-      program.templates.push(cloneDeep(CONSTANT.TEMPLATE))
-    }
-    state.template = {
-      userId: state.userId,
-      category: '',
-      days: [],
-      programs: [program]
-    }
-  },
-
-  // 프로그램 추가
-  [CONSTANT.ADD_PROGRAM](state, count) {
-    const order = state.template.programs.length
-    for (let i = 1; i <= count; i++) {
-      const program = cloneDeep(CONSTANT.PROGRAM)
-      program.order = order + i
-      for (let i = 0; i < CONSTANT.DEFAULT_TEMPLATE_COUNT; i++) {
-        program.templates.push(cloneDeep(CONSTANT.TEMPLATE))
-      }
-      state.template.programs.push(program)
-    }
-  },
-
-  // 프로그램 수정
-  [CONSTANT.UPDATE_PROGRAM](state, program) {
-    state.template.programs.some(({ order }, index) => {
-      if (order === program.order) {
-        state.template.programs.splice(index, 1, program)
-      }
-      return order === program.order
-    })
-  },
-
-  // 템플릿 수정
-  [CONSTANT.UPDATE_TEMPLATE](state, template) {
-    state.template = template
+  // 템플릿 리스트 셋팅
+  [CONSTANT.SET_TEMPLATE_LIST](state, aTemplate) {
+    state.aTemplate = aTemplate
   },
 
   // 템플릿 리스트 수정
-  [CONSTANT.SET_TEMPLATE_LIST](state, aTemplate) {
-    state.aTemplate = aTemplate
+  [CONSTANT.UPDATE_TEMPLATE_LIST](state, template) {
+    if (state.aTemplate.length === 0) {
+      state.aTemplate = [template]
+      return
+    }
+    state.aTemplate.some((t, index) => {
+      if (t._id === template._id) {
+        state.aTemplate.splice(index, 1, template)
+      }
+      return t._id === template._id
+    })
   },
 
   // 오늘 날짜 정보 셋팅

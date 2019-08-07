@@ -2,7 +2,6 @@ export default () => ({
   login: true,
   userId: '',
   aTemplate: [],
-  template: {},
   oToDay: {
     year: 0,
     month: 0,

@@ -1,7 +1,7 @@
 <template>
   <div class="content">
     <calendar-date-selector />
-    <category-selector />
+    <Template-Tag />
     <calendar-schedule />
   </div>
 </template>
@@ -9,7 +9,7 @@
 <script>
 import CONSTANT from '@/common/constant'
 import CalendarDateSelector from '@/components/CalendarDateSelector.vue'
-import CategorySelector from '@/components/CategorySelector.vue'
+import TemplateTag from '@/components/TemplateTag.vue'
 import CalendarSchedule from '@/components/CalendarSchedule.vue'
 
 export default {
@@ -19,7 +19,7 @@ export default {
   },
   components: {
     CalendarDateSelector,
-    CategorySelector,
+    TemplateTag,
     CalendarSchedule
   },
   async fetch({ store }) {
@@ -42,7 +42,7 @@ export default {
 .content {
   margin: auto;
   width: 95%;
-  min-width: 1450px;
+  /* min-width: 1450px; */
 }
 
 div.layer {
