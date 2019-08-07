@@ -31,23 +31,32 @@ export default {
   },
 
   SET_LOGIN_INFO: '',
+  SET_TODAY: 'SetToday',
+
   INIT_PROGRAM: 'initProgram',
   ADD_PROGRAM: 'addProgram',
   REMOVE_PROGRAM: 'removeProgram',
   UPDATE_PROGRAM: 'updateProgram',
+
   REGIST_TEMPLATE: 'registTemplate',
   MODIFY_TEMPLATE: 'modifyTemplate',
   UPDATE_TEMPLATE: 'updateTemplate',
 
+  TOGGLE_TAG_ON_OFF: 'toggleTagOnOff',
   GET_TEMPLATE_LIST: 'getTemplateList',
-  UPDATE_TEMPLATE_LIST: 'updateTemplateList',
   SET_TEMPLATE_LIST: 'setTemplateList',
+  UPDATE_TEMPLATE_LIST: 'updateTemplateList',
 
-  SET_TODAY: 'SetToday',
+  GET_SCHEDULE: 'getSchedule',
+  SET_SCHEDULE: 'setSchedule',
   SET_SCHEDULE_OF_CALENDAR: 'setScheduleOfCalendar',
-  SET_CATEGORY_LIST: 'setCategoryList',
-  SET_CALENDAR_DATE_LIST: 'setCalendarDateList',
   SET_SCHEDULE_OF_CALEDAR: 'setScheduleOfCaledar',
 
+  SET_CATEGORY_LIST: 'setCategoryList',
+  SET_CALENDAR_DATE_LIST: 'setCalendarDateList',
+
+  SET_LAST_SCHEDULE: 'setLastSchedule',
+  SET_ORDER: 'setOrder',
+  _SET_CELL_DATE_OF_CALENDAR: '_setCellDateOfCalendar',
   _SET_CELL_DATE_OF_SCHEDULE: '_setCellDateOfTemplate'
 }

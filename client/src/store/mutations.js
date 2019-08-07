@@ -11,19 +11,36 @@ export default {
   // 템플릿 리스트 셋팅
   [CONSTANT.SET_TEMPLATE_LIST](state, aTemplate) {
     state.aTemplate = aTemplate
+    const aTag = aTemplate.map(({ _id, tag }) => {
+      return { _id, tag, isOn: true }
+    })
+    state.aTag = aTag
   },
 
   // 템플릿 리스트 수정
   [CONSTANT.UPDATE_TEMPLATE_LIST](state, template) {
+    const { _id, tag, isOne = true } = template
     if (state.aTemplate.length === 0) {
       state.aTemplate = [template]
+      state.aTag = { _id, tag, isOne }
       return
     }
     state.aTemplate.some((t, index) => {
       if (t._id === template._id) {
         state.aTemplate.splice(index, 1, template)
+        state.aTag.splice(index, 1, { _id, tag, isOne })
       }
       return t._id === template._id
+    })
+  },
+
+  [CONSTANT.TOGGLE_TAG_ON_OFF](state, tag) {
+    tag.isOn = !tag.isOn
+    state.aTag.some(({ _id }, index) => {
+      if (_id === tag._id) {
+        state.aTag.splice(index, 1, tag)
+      }
+      return _id === tag._id
     })
   },
 
@@ -53,8 +70,23 @@ export default {
     oToDay.MAX_ROW = Math.ceil((oToDay.startDay + oToDay.lastDate) / 7)
   },
 
-  // 스케줄 정보를 셋팅
+  // 달력의 스캐줄 정보 셋팅
+  [CONSTANT.SET_SCHEDULE](state, schedule) {
+    state.schedule = schedule
+  },
+
+  // 달력의 날짜 정보 셋팅
   [CONSTANT.SET_CALENDAR_DATE_LIST](state, aCalendarDate) {
     state.aCalendarDate = aCalendarDate
+  },
+
+  // 가장 마지막 등록된 스케줄 정보 저장
+  [CONSTANT.SET_LAST_SCHEDULE](state, lastSchedule) {
+    state.lastSchedule[lastSchedule.templateId] = lastSchedule
+  },
+
+  // 다음번 실행할 프로그램 ORDER 저장
+  [CONSTANT.SET_ORDER](state, { tagId, order }) {
+    state.order[tagId] = order
   }
 }

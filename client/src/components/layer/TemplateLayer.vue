@@ -67,7 +67,6 @@
           />
         </div>
       </div>
-      <div class="swiper-pagination" />
       <div class="field_button">
         <button @click="templateType ==='new' ? registTemplate() : modifyTemplate()">
           {{ templateType === 'new' ? '등록' : '수정' }}

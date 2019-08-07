@@ -2,6 +2,8 @@ export default () => ({
   login: true,
   userId: '',
   aTemplate: [],
+  aTag: [],
+  schedule: null,
   oToDay: {
     year: 0,
     month: 0,
@@ -13,5 +15,11 @@ export default () => ({
     MAX_CELL: 7,
     START_DAY: 'SUNDAY'
   },
-  aCalendarDate: []
+  aCalendarDate: [],
+  lastSchedule: {
+    // 템플릿ID: schedule
+  },
+  order: {
+    // 템플릿ID: 숫자
+  }
 })

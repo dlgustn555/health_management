@@ -1,5 +1,7 @@
+/* eslint-disable prettier/prettier */
 import CONSTANT from '@/common/constant'
 import API from '@/common/api'
+import L from '@/common/lazy'
 
 export default {
   async [CONSTANT.REGIST_TEMPLATE]({ state, commit }, template) {
@@ -28,17 +30,20 @@ export default {
     commit(CONSTANT.SET_TEMPLATE_LIST, aTemplate)
   },
 
-  async [CONSTANT.SET_SCHEDULE_OF_CALENDAR]({ state, commit, dispatch }) {
-    const { oToDay } = state
+  async [CONSTANT.GET_SCHEDULE]({ state, commit }) {
+    const aTemplateId = state.aTemplate.map(({ _id }) => _id)
+    const { data } = await this.$axios.post(
+      API.GET_SCHEDULE_LIST(state.userId),
+      aTemplateId
+    )
 
-    // 1. API를 호출해서 schedule 정보를 조회하여 세팅한다.
-    const registSchedule = []
-    const lastRegistSchedule = registSchedule.map(schedule => {
-      const [lastScedule] = schedule.filter(schedule => schedule).reverse()
-      return lastScedule
-    })
+    const schedule = data.success ? data.data.schedule : null
+    commit(CONSTANT.SET_SCHEDULE, schedule)
+  },
 
-    // 2. 해당 월의 날짜 정보를 셋팅한다.
+  async [CONSTANT.SET_SCHEDULE_OF_CALENDAR]({ state, commit }) {
+    const { oToDay, aTemplate, schedule, lastSchedule, order } = state
+
     const aCalendarDate = Array.apply(
       null,
       Array(oToDay.MAX_ROW * oToDay.MAX_CELL)
@@ -47,75 +52,84 @@ export default {
         date: 0,
         day: cellIndex % oToDay.MAX_CELL,
         isShow: false,
-        aSchedule: []
+        isBiggerThanToDay: false,
+        aSchedule: {}
       }
 
-      // Step 1: 날짜 정보 셋팅
       if (cellIndex === 0 && cellIndex === oToDay.startDay) {
         oCellDate.date = 1
         oCellDate.isShow = true
       } else if (cellIndex >= oToDay.startDay) {
         oCellDate.date = cellIndex - oToDay.startDay + 1
         oCellDate.isShow = oCellDate.date <= oToDay.lastDate
+        oCellDate.isBiggerThanToDay = oCellDate.date > oToDay.todayDate
       }
 
-      // Step 2: 날짜의 스캐줄 정보를 셋팅
-      dispatch(CONSTANT._SET_CELL_DATE_OF_SCHEDULE, {
-        cellIndex,
-        oCellDate,
-        registSchedule,
-        lastRegistSchedule
-      })
+      for (const tagId in schedule) {
+        const scheduleOfcell = schedule[tagId][cellIndex]
+        oCellDate.aSchedule[tagId] = {
+          isShowTag: false, // true: 태그를 보여준다. v-show=true
+          isFill: false, // true: 태그에 클래스 fill 를 붙인다. = 꽉찬 태그
+          isDotted: false,
+          schedule: null
+        }
+
+        const [template] = L.take(
+          1,
+          L.filter(template => template._id === tagId, aTemplate)
+        )
+
+        //  CASE1. 과거인데 운동한 적이 있다.
+        if (oCellDate.date < oToDay.todayDate && !!scheduleOfcell) {
+          oCellDate.aSchedule[tagId].isShowTag = true
+          oCellDate.aSchedule[tagId].isFill = true
+          oCellDate.aSchedule[tagId].part = scheduleOfcell.part
+          commit(CONSTANT.SET_LAST_SCHEDULE, scheduleOfcell)
+          commit(CONSTANT.SET_ORDER, { tagId, order: scheduleOfcell.order })
+
+          // CASE 2. 현재
+        } else if (oCellDate.date === oToDay.todayDate && template.days.some(day => day === oCellDate.day)) {
+          oCellDate.aSchedule[tagId].isShowTag = true
+          oCellDate.aSchedule[tagId].isFill = !!scheduleOfcell
+          // 오늘 등록한게 있다.
+          if (!!scheduleOfcell) {
+            oCellDate.aSchedule[tagId].part = scheduleOfcell.part
+            commit(CONSTANT.SET_LAST_SCHEDULE, scheduleOfcell)
+            commit(CONSTANT.SET_ORDER, { tagId, order: scheduleOfcell.order })
+            continue
+          }
+
+          // 과거 언전게 마지막으로 등록한게 있다.
+          if (!!lastSchedule[tagId]) {
+            template.programs[0].part = lastSchedule[tagId].part
+            commit(CONSTANT.SET_ORDER, { tagId, order: lastSchedule[tagId].order })
+            continue
+          }
+
+          oCellDate.aSchedule[tagId].part = template.programs[0].part
+          commit(CONSTANT.SET_ORDER, { tagId, order: template.programs[0].order })
+
+          // CASE 3. 미래
+        } else if (oCellDate.date > oToDay.todayDate && template.days.some(day => day === oCellDate.day)) {
+          oCellDate.aSchedule[tagId].isShowTag = true
+          oCellDate.aSchedule[tagId].isDotted = true
+          
+          if (template.programs.length === 1) {
+            oCellDate.aSchedule[tagId].part = template.programs[0].part
+            continue
+          }
+
+          const nowOrder = order[tagId] || 0
+
+          oCellDate.aSchedule[tagId].part = template.programs[nowOrder].part
+          const nextOrder = (nowOrder + 1) % template.programs.length
+          commit(CONSTANT.SET_ORDER, { tagId, order: nextOrder })
+        }
+      }
 
       return oCellDate
     })
 
     commit(CONSTANT.SET_CALENDAR_DATE_LIST, aCalendarDate)
-  },
-
-  // 날짜의 스캐줄 정보를 셋팅
-  [CONSTANT._SET_CELL_DATE_OF_SCHEDULE](
-    { state },
-    { cellIndex, oCellDate, registSchedule, lastRegistSchedule }
-  ) {
-    const { aTemplate, oToDay } = state
-    const isFillCategoryButton = !!registSchedule[cellIndex]
-    let isShowDateField =
-      oCellDate.date >= oToDay.todayDate || !!registSchedule[cellIndex]
-
-    oCellDate.aSchedule = aTemplate.map(({ _id, category, days, programs }) => {
-      isShowDateField =
-        isShowDateField && days.some(day => day === oCellDate.day)
-
-      let nextOrder = 0
-      lastRegistSchedule.some(({ templateId, order }) => {
-        if (templateId === _id) {
-          nextOrder = order
-        }
-        return templateId === _id
-      })
-
-      if (oCellDate.date >= oToDay.todayDate) {
-        nextOrder += (oCellDate.date - oToDay.todayDate) % programs.length
-      }
-
-      const part = isFillCategoryButton
-        ? registSchedule[cellIndex].part
-        : programs[nextOrder].part
-
-      const order = isFillCategoryButton
-        ? registSchedule[cellIndex].order
-        : nextOrder + 1
-
-      return {
-        isShow: isShowDateField,
-        isFill: isFillCategoryButton,
-        templateId: _id,
-        category,
-        part,
-        order,
-        data: registSchedule[cellIndex] || null
-      }
-    })
   }
 }

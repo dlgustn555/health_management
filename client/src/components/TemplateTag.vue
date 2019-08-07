@@ -11,15 +11,16 @@
       </button>
       <ul class="template-list">
         <li
-          v-for="template in aTemplate"
-          :key="template._id">
+          v-for="tag in aTag"
+          :key="tag._id">
           <a
+            :class="{ fill: tag.isOn }"
             href="#"
-            class="category_button fill"
-            @click.prevent="showEditScheduleTemplateLayer(template._id)">
-            {{ template.tag }}
+            class="category_button"
+            @click.prevent="toggleIsOne(tag)">
+            {{ tag.tag }}
           </a>
-          <button>x</button>
+          <button @click="showEditScheduleTemplateLayer(tag._id)">m</button>
         </li>
       </ul>
     </div>
@@ -46,7 +47,7 @@ export default {
       templateType: 'new'
     }
   },
-  computed: mapState(['userId', 'aTemplate']),
+  computed: mapState(['userId', 'aTemplate', 'aTag']),
   methods: {
     showEditScheduleTemplateLayer(templateId) {
       const [template] = L.take(
@@ -59,14 +60,18 @@ export default {
     },
 
     showRegistScheduleTemplateLayer() {
-      const [program] = createProgram(1, 1)
+      const programs = createProgram(1, 1)
       this.template = {
         tag: '',
         days: [],
-        programs: [program]
+        programs
       }
       this.isShow = true
       this.templateType = 'new'
+    },
+
+    toggleIsOne(tag) {
+      this.$store.commit(CONSTANT.TOGGLE_TAG_ON_OFF, tag)
     }
   }
 }

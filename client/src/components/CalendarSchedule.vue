@@ -25,17 +25,16 @@
         <div v-show="oCellDate.isShow">
           <span>{{ oCellDate.date }}</span>
           <div
-            v-for="schedule in oCellDate.aSchedule"
-            :key="schedule._id"
-            :class="{ opacity_6: !schedule.isFill }"
+            v-for="onTag in onTags"
+            :key="onTag._id"
+            :class="{ opacity_6: oCellDate.isBiggerThanToDay }"
             class="field">
             <a
-              v-show="schedule.isShow"
-              :class="schedule.isFill ? 'fill' : 'dotted'"
+              v-show="oCellDate.aSchedule[onTag._id].isShowTag"
+              :class="{ dotted: oCellDate.aSchedule[onTag._id].isDotted, fill: oCellDate.aSchedule[onTag._id].isFill }"
               href="#"
-              class="category_button"
-              @click.prevent.stop="registScheduleFromCategory(oCellDate, schedule)">
-              {{ schedule.tag }}{{ schedule.part ? ` - ${schedule.part}` : '' }}
+              class="category_button">
+              {{ onTag.tag }} {{ oCellDate.aSchedule[onTag._id].part !== '' ? `- ${oCellDate.aSchedule[onTag._id].part}` : '' }}
             </a>
           </div>
         </div>
@@ -60,7 +59,12 @@ export default {
       schedule: null
     }
   },
-  computed: mapState(['oToDay', 'aCalendarDate', 'aTemplate']),
+  computed: {
+    ...mapState(['oToDay', 'aCalendarDate', 'aTag']),
+    onTags() {
+      return this.aTag.filter(tag => tag.isOn)
+    }
+  },
   methods: {
     getWeekSchedule(rowIndex) {
       const begin = rowIndex * this.oToDay.MAX_CELL
@@ -117,6 +121,9 @@ export default {
 .cell.today {
   border: 4px solid #a0a0ff;
   padding: 7px;
+}
+.cell.today .category_button:hover {
+  background: #3ac1a4;
 }
 .cell:hover {
   border: 4px solid black;
