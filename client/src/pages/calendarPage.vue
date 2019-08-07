@@ -111,8 +111,8 @@ div.layer .content {
   cursor: pointer;
 }
 .opacity_6 {
-  opacity: 0.6;
-  filter: alpha(opacity=0.6);
+  opacity: 0.3;
+  filter: alpha(opacity=0.3);
 }
 input {
   padding-left: 10px;

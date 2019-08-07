@@ -22,9 +22,10 @@ export default {
     const { _id, tag, isOne = true } = template
     if (state.aTemplate.length === 0) {
       state.aTemplate = [template]
-      state.aTag = { _id, tag, isOne }
+      state.aTag = [{ _id, tag, isOne }]
       return
     }
+
     state.aTemplate.some((t, index) => {
       if (t._id === template._id) {
         state.aTemplate.splice(index, 1, template)

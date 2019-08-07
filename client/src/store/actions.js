@@ -8,6 +8,7 @@ export default {
     template.userId = state.userId
     const { data } = await this.$axios.post(API.REGIST_TEMPLATE, template)
     if (data.success) {
+      template._id = data.data._id
       commit(CONSTANT.UPDATE_TEMPLATE_LIST, template)
     }
     return data
