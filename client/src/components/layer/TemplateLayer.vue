@@ -20,7 +20,9 @@
             @click="toggleDays">
           <label
             class="all"
-            for="day_checkbox_all">ALL</label>
+            for="day_checkbox_all">
+            ALL
+          </label>
         </span>
         <span
           v-for="({ name, value }, index) in DAYS.START_SUNDAY"
@@ -32,7 +34,9 @@
             :value="value"
             type="checkbox">
           <label
-            :for="`day_checkbox_${index}`">{{ name }}</label>
+            :for="`day_checkbox_${index}`">
+            {{ name }}
+          </label>
         </span>
       </div>
       <div class="field">
@@ -42,6 +46,7 @@
           <option
             v-for="count in 10"
             :key="`program_${count}`"
+            :selected="count === template.programs.length"
             :value="count">
             {{ count }}
           </option>
@@ -64,6 +69,7 @@
             :key="`programForm_${index}`"
             :program="program"
             class="swiper-slide"
+            @deleteProgram="deleteSeletedProgram"
           />
         </div>
       </div>
@@ -127,6 +133,7 @@ export default {
       const newCount = target.value
       const beforeCount = this.template.programs.length
       const gap = newCount - beforeCount
+
       if (gap > 0) {
         const order = this.template.programs[beforeCount - 1].order + 1
         const programs = createProgram(gap, order)
@@ -136,6 +143,17 @@ export default {
       } else {
         this.template.programs = this.template.programs.slice(0, gap)
       }
+    },
+
+    deleteSeletedProgram(programIndex) {
+      const prevPrograms = this.template.programs.slice(0, programIndex - 1)
+      const nextPrograms = this.template.programs
+        .slice(programIndex)
+        .map(program => {
+          --program.order
+          return program
+        })
+      this.template.programs = [...prevPrograms, ...nextPrograms]
     },
 
     async registTemplate() {
@@ -184,9 +202,6 @@ select {
 .templateWriteFromSwiper {
   width: 100%;
 }
-.day_checkbox {
-  margin-right: 10px;
-}
 .day_checkbox input {
   width: 18px;
   height: 18px;
@@ -195,8 +210,5 @@ select {
   padding-right: 10px;
   font-size: 17px;
   font-weight: bold;
-}
-.day_checkbox label.all {
-  padding: 0;
 }
 </style>

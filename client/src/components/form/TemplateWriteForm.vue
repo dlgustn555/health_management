@@ -1,15 +1,20 @@
 <template>
   <div class="template-form">
     <div class="field">
-      <label><span>♣</span> {{ program.order }} 일차 프로그램</label>
-      :
+      <label>
+        <span>♣</span>
+        {{ program.order }} 일차 프로그램
+        <span>♣</span>
+      </label>
+    </div>
+    <div class="field">
       <input
         v-model="program.part"
         placeholder="가슴 / 등 / 하체"
         type="text"
+        class="part_input"
         @input="inputPartFiled">
-      <button>x</button>
-      <span>♣</span>
+      <button @click="deleteProgram(program.order)">삭제</button>
     </div>
     <div class="course_list">
       <div
@@ -80,6 +85,12 @@ export default {
         property === 'set' ? parseInt(target.value || 0, 10) : target.value
     },
 
+    deleteProgram(programIndex) {
+      if (confirm(`${programIndex}일차 프로그램을 삭제하시겠습니까?`)) {
+        this.$emit('deleteProgram', programIndex)
+      }
+    },
+
     deleteCourse(index) {
       this.program.course.splice(index, 1)
     },
@@ -108,6 +119,9 @@ export default {
 .add_course:hover {
   cursor: pointer;
   background-color: rgba(115, 84, 201, 0.3);
+}
+.part_input {
+  width: 300px;
 }
 .set_input {
   width: 60px;
