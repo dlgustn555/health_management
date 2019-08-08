@@ -38,4 +38,10 @@ router.patch('/:templateId', async (ctx) => {
   ctx.body = await Query.findByIdAndUpdate(Template, id, update);
 })
 
+// 특정ID 템플릿 삭제
+router.delete('/:userId/:templateId', async (ctx) => {
+  const { userId, templateId: _id } = ctx.params
+  ctx.body = await Query.findOneAndRemove(Template, { _id, userId })
+})
+
 module.exports = router.routes();

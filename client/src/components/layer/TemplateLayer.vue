@@ -122,6 +122,9 @@ export default {
       this.isAll = newValue.length === 7
     }
   },
+  created() {
+    this.isAll = this.template.days.length === 7
+  },
   methods: {
     toggleDays() {
       this.isAll = !this.isAll

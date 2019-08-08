@@ -34,11 +34,22 @@ const findByIdAndUpdate = async (model, id, update, option = {}) => {
   }
 };
 
+const findOneAndRemove = async (
+  model, query, option = { rawResult: true }, callback = () => {}) => {
+  try {
+    const result = await model.findOneAndRemove(query, option, callback);
+    return { success: true, data: { result } };
+  } catch (error) {
+    return { success: false, data: { error } };
+  }
+};
+
 const Query = {
   save,
   find,
   findById,
-  findByIdAndUpdate
+  findByIdAndUpdate,
+  findOneAndRemove
 };
 
 module.exports = Query;

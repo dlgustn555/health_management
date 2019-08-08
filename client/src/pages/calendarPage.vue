@@ -27,7 +27,7 @@ export default {
     store.commit(CONSTANT.SET_TODAY)
     await store.dispatch(CONSTANT.GET_TEMPLATE_LIST)
     await store.dispatch(CONSTANT.GET_SCHEDULE)
-    await store.dispatch(CONSTANT.SET_SCHEDULE_OF_CALENDAR)
+    store.commit(CONSTANT.SET_SCHEDULE_OF_CALENDAR)
   },
   data() {
     return {}

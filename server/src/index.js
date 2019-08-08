@@ -6,10 +6,15 @@ const api = require('./api');
 // 1. 몽고 DB 연동
 mongoose.Promise = global.Promise;
 
-const isHome = process.env.MODE_ENV === 'home'
-const dbUrl = isHome ? 'mongodb://localhost:27017' : 'mongodb://talk_rw:talk_rw@dev-talk-mongodb01.ncl.nfra.io:30011/?authSource=admin'
+const isHome = process.env.MODE_ENV === 'home';
+const dbUrl = isHome ? 'mongodb://localhost:27017' : 'mongodb://talk_rw:talk_rw@dev-talk-mongodb01.ncl.nfra.io:30011/?authSource=admin';
+const option = {
+  useNewUrlParser: true,
+  useFindAndModify: false,
+  dbName: 'exercise'
+};
 
-mongoose.connect(dbUrl, { useNewUrlParser: true, dbName: 'exercise' })
+mongoose.connect(dbUrl, option)
   .then(() => {
     console.log('●●● Successfully connected to mongoDB!')
     console.log(`●●● DB URL => ${dbUrl}`)

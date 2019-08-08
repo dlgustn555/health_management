@@ -39,13 +39,17 @@ export default {
   UPDATE_PROGRAM: 'updateProgram',
 
   REGIST_TEMPLATE: 'registTemplate',
+  DELETE_TEMPLATE: 'deleteTemplate',
   MODIFY_TEMPLATE: 'modifyTemplate',
   UPDATE_TEMPLATE: 'updateTemplate',
 
   TOGGLE_TAG_ON_OFF: 'toggleTagOnOff',
+
   GET_TEMPLATE_LIST: 'getTemplateList',
   SET_TEMPLATE_LIST: 'setTemplateList',
+  REGIST_TEMPLATE_LIST: 'registTemplateList',
   UPDATE_TEMPLATE_LIST: 'updateTemplateList',
+  DELETE_TEMPLATE_LIST: 'deleteTemplateList',
 
   GET_SCHEDULE: 'getSchedule',
   SET_SCHEDULE: 'setSchedule',
@@ -57,6 +61,7 @@ export default {
 
   SET_LAST_SCHEDULE: 'setLastSchedule',
   SET_ORDER: 'setOrder',
+  DELETE_ORDER: 'deleteOrder',
   _SET_CELL_DATE_OF_CALENDAR: '_setCellDateOfCalendar',
   _SET_CELL_DATE_OF_SCHEDULE: '_setCellDateOfTemplate'
 }

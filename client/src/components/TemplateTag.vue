@@ -7,7 +7,7 @@
       :tag-is-on="tagIsOn"
       @hideLayer="isShow=false" />
     <div>
-      <button @click="showRegistScheduleTemplateLayer">
+      <button @click="showRegistTemplateLayer">
         템플릿 추가+
       </button>
       <ul class="template-list">
@@ -24,10 +24,11 @@
           <img
             src="@/assets/images/modify.png"
             title="수정"
-            @click="showEditScheduleTemplateLayer(tag)">
+            @click="showEditTemplateLayer(tag)">
           <img 
             src="@/assets/images/x.png"
-            title="삭제">
+            title="삭제"
+            @click="deleteTemplate(tag)">
         </li>
       </ul>
     </div>
@@ -57,7 +58,7 @@ export default {
   },
   computed: mapState(['userId', 'aTemplate', 'aTag']),
   methods: {
-    showEditScheduleTemplateLayer(tag) {
+    showEditTemplateLayer(tag) {
       const [template] = L.take(
         1,
         L.filter(template => template._id === tag._id, this.aTemplate)
@@ -68,7 +69,7 @@ export default {
       this.tagIsOn = tag.isOn
     },
 
-    showRegistScheduleTemplateLayer() {
+    showRegistTemplateLayer() {
       const programs = createProgram(1, 1)
       this.template = {
         tag: '',
@@ -77,6 +78,20 @@ export default {
       }
       this.isShow = true
       this.templateType = 'new'
+    },
+
+    async deleteTemplate(tag) {
+      if (!confirm(`${tag.tag} 삭제하시겠습니까?`)) {
+        return
+      }
+      const { success, data } = await this.$store.dispatch(
+        CONSTANT.DELETE_TEMPLATE,
+        tag._id
+      )
+      const message = success
+        ? '삭제되었습니다'
+        : `삭제에 실패했습니다.\n${data.error.message}`
+      alert(message)
     },
 
     toggleIsOne(tag) {

@@ -22,7 +22,7 @@
         :key="cellIndex"
         :class="oCellDate.date === oToDay.todayDate && 'today'"
         class="cell">
-        <div v-show="oCellDate.isShow">
+        <div v-if="oCellDate.isShow">
           <span>{{ oCellDate.date }}</span>
           <div
             v-for="onTag in onTags"
@@ -30,7 +30,7 @@
             :class="{ opacity_6: oCellDate.isBiggerThanToDay }"
             class="field">
             <a
-              v-show="oCellDate.aSchedule[onTag._id].isShowTag"
+              v-if="oCellDate.aSchedule[onTag._id] && oCellDate.aSchedule[onTag._id].isShowTag"
               :class="{ dotted: oCellDate.aSchedule[onTag._id].isDotted, fill: oCellDate.aSchedule[onTag._id].isFill }"
               href="#"
               class="category_button">
