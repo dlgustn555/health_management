@@ -26,7 +26,7 @@
             title="수정"
             @click="showEditTemplateLayer(tag)">
           <img 
-            src="@/assets/images/x.png"
+            src="@/assets/images/delete.png"
             title="삭제"
             @click="deleteTemplate(tag)">
         </li>
@@ -121,14 +121,14 @@ ul.template-list {
 .template-list li img {
   position: absolute;
   top: -12px;
-  left: 0px;
+  left: 5px;
   width: 15px;
   height: 15px;
   cursor: pointer;
 }
 .template-list li img:last-child {
   top: -11px;
-  left: 16px;
+  left: 21px;
   width: 13px;
   height: 13px;
 }
