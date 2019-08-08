@@ -99,6 +99,10 @@ export default {
     templateType: {
       type: String,
       default: 'new'
+    },
+    tagIsOn: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -171,7 +175,7 @@ export default {
     async modifyTemplate() {
       const { data, success } = await this.$store.dispatch(
         CONSTANT.MODIFY_TEMPLATE,
-        this.template
+        { template: this.template, isOn: this.tagIsOn }
       )
       const message = success
         ? '수정되었습니다.'

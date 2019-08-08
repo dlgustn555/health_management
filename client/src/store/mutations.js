@@ -18,18 +18,18 @@ export default {
   },
 
   // 템플릿 리스트 수정
-  [CONSTANT.UPDATE_TEMPLATE_LIST](state, template) {
-    const { _id, tag, isOne = true } = template
+  [CONSTANT.UPDATE_TEMPLATE_LIST](state, { template, isOn }) {
+    const { _id, tag } = template
     if (state.aTemplate.length === 0) {
       state.aTemplate = [template]
-      state.aTag = [{ _id, tag, isOne }]
+      state.aTag = [{ _id, tag, isOn }]
       return
     }
 
     state.aTemplate.some((t, index) => {
       if (t._id === template._id) {
         state.aTemplate.splice(index, 1, template)
-        state.aTag.splice(index, 1, { _id, tag, isOne })
+        state.aTag.splice(index, 1, { _id, tag, isOn })
       }
       return t._id === template._id
     })

@@ -4,6 +4,7 @@
       v-if="isShow"
       :template="template"
       :template-type="templateType"
+      :tag-is-on="tagIsOn"
       @hideLayer="isShow=false" />
     <div>
       <button @click="showRegistScheduleTemplateLayer">
@@ -20,7 +21,13 @@
             @click.prevent="toggleIsOne(tag)">
             {{ tag.tag }}
           </a>
-          <button @click="showEditScheduleTemplateLayer(tag._id)">m</button>
+          <img
+            src="@/assets/images/modify.png"
+            title="수정"
+            @click="showEditScheduleTemplateLayer(tag)">
+          <img 
+            src="@/assets/images/x.png"
+            title="삭제">
         </li>
       </ul>
     </div>
@@ -44,19 +51,21 @@ export default {
     return {
       isShow: false,
       template: null,
-      templateType: 'new'
+      templateType: 'new',
+      tagIsOn: true
     }
   },
   computed: mapState(['userId', 'aTemplate', 'aTag']),
   methods: {
-    showEditScheduleTemplateLayer(templateId) {
+    showEditScheduleTemplateLayer(tag) {
       const [template] = L.take(
         1,
-        L.filter(template => template._id === templateId, this.aTemplate)
+        L.filter(template => template._id === tag._id, this.aTemplate)
       )
       this.template = cloneDeep(template)
       this.isShow = true
       this.templateType = 'edit'
+      this.tagIsOn = tag.isOn
     },
 
     showRegistScheduleTemplateLayer() {
@@ -89,9 +98,24 @@ ul.template-list {
   float: right;
 }
 .template-list li {
+  position: relative;
   display: inline-block;
   padding: 0px 5px;
   margin: 0px 3px;
+}
+.template-list li img {
+  position: absolute;
+  top: -12px;
+  left: 0px;
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+}
+.template-list li img:last-child {
+  top: -11px;
+  left: 16px;
+  width: 13px;
+  height: 13px;
 }
 button {
   float: right;

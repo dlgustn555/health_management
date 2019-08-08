@@ -9,18 +9,18 @@ export default {
     const { data } = await this.$axios.post(API.REGIST_TEMPLATE, template)
     if (data.success) {
       template._id = data.data._id
-      commit(CONSTANT.UPDATE_TEMPLATE_LIST, template)
+      commit(CONSTANT.UPDATE_TEMPLATE_LIST, { template, isOn: true })
     }
     return data
   },
 
-  async [CONSTANT.MODIFY_TEMPLATE]({ commit }, template) {
+  async [CONSTANT.MODIFY_TEMPLATE]({ commit }, { template, isOn }) {
     const { data } = await this.$axios.patch(
       API.UPDATE_TEMPLATE(template._id),
       template
     )
     if (data.success) {
-      commit(CONSTANT.UPDATE_TEMPLATE_LIST, template)
+      commit(CONSTANT.UPDATE_TEMPLATE_LIST, { template, isOn })
     }
     return data
   },
@@ -100,7 +100,7 @@ export default {
             continue
           }
 
-          // 과거 언전게 마지막으로 등록한게 있다.
+          // 과거 언젠가 마지막으로 등록한게 있다.
           if (!!lastSchedule[tagId]) {
             template.programs[0].part = lastSchedule[tagId].part
             commit(CONSTANT.SET_ORDER, { tagId, order: lastSchedule[tagId].order })
