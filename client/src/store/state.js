@@ -3,7 +3,7 @@ export default () => ({
   userId: '',
   aTemplate: [],
   aTag: [],
-  schedule: null,
+  schedule: {},
   oToDay: {
     year: 0,
     month: 0,

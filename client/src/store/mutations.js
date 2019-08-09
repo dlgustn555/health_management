@@ -89,6 +89,14 @@ export default {
     state.schedule = schedule
   },
 
+  [CONSTANT.ADD_SCHEDULE](state, { _id, aSchedule }) {
+    state.schedule[_id] = aSchedule
+  },
+
+  [CONSTANT.UPDATE_SCHEDULE](state, schedule) {
+    state.schedule[schedule.templateId].splice(schedule.cellIndex, 1, schedule)
+  },
+
   // 달력의 날짜 정보 셋팅
   [CONSTANT.SET_CALENDAR_DATE_LIST](state, aCalendarDate) {
     state.aCalendarDate = aCalendarDate
@@ -117,6 +125,7 @@ export default {
       const oCellDate = {
         date: 0,
         day: cellIndex % oToDay.MAX_CELL,
+        cellIndex,
         isShow: false,
         isBiggerThanToDay: false,
         aSchedule: {}
@@ -137,7 +146,7 @@ export default {
           isShowTag: false, // true: 태그를 보여준다. v-show=true
           isFill: false, // true: 태그에 클래스 fill 를 붙인다. = 꽉찬 태그
           isDotted: false,
-          schedule: null
+          schedule: scheduleOfcell
         }
 
         const [template] = L.take(

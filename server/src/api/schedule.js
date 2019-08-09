@@ -2,6 +2,12 @@ const Router = require('koa-router');
 const Schedule = require('../model/scheduleModel');
 const Query = require('../util/query.js');
 
+const getSchedule = (cellCnt, aResult) => {
+  const aSchedule = Array(...Array(cellCnt)).map(_ => null);
+  aResult.forEach((result) => { aSchedule[result.cellIndex] = result });
+  return aSchedule;
+};
+
 const router = new Router();
 
 router.get('/', (ctx) => {
@@ -21,14 +27,18 @@ router.post('/', async (ctx) => {
 // ALL 스케즐 조회
 router.post('/user/:userId', async (ctx) => {
   const { userId } = ctx.params;
-  const aTemplateId = ctx.request.body;
+  const {
+    aTemplateId, year, month, cellCnt
+  } = ctx.request.body;
   const schedule = {};
 
   // eslint-disable-next-line no-restricted-syntax
   for (const templateId of aTemplateId) {
     // eslint-disable-next-line no-await-in-loop
-    const { success, data } = await Query.find(Schedule, { userId, templateId });
-    schedule[templateId] = success ? data.aResult : [];
+    const { success, data } = await Query.find(Schedule, {
+      userId, templateId, year, month
+    });
+    schedule[templateId] = success ? getSchedule(cellCnt, data.aResult) : [];
   }
   ctx.body = { success: true, data: { schedule } };
 });

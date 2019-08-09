@@ -128,7 +128,6 @@ export default {
         CONSTANT.REGIST_SCHEDULE,
         this.schedule
       )
-
       const message = success
         ? '등록되었습니다.'
         : `등록에 실패 했습니다.\n${data.error.message}`
@@ -208,7 +207,8 @@ input.repeat {
   font-weight: bold;
 }
 .course_list {
-  height: 500px;
+  min-height: 500px;
+  max-height: 600px;
   padding-bottom: 200px;
   overflow: scroll;
 }

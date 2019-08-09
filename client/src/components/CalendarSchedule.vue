@@ -105,7 +105,8 @@ export default {
         part,
         year: this.oToDay.year,
         month: this.oToDay.month,
-        date: oCellDate.date
+        date: oCellDate.date,
+        cellIndex: oCellDate.cellIndex
       }
     }
   }

@@ -6,16 +6,16 @@ import L from '@/common/lazy'
 export default {
   // 신규 템플릿 등록
   async [CONSTANT.REGIST_TEMPLATE]({ state, commit }, template) {
-    template.userId = state.userId
+    const { userId, oToDay: { MAX_CELL, MAX_ROW } } = state
+    template.userId = userId
     const { data } = await this.$axios.post(API.REGIST_TEMPLATE, template)
     if (data.success) {
-      const schedule = {}
-      schedule[data.data._id] = []
       template._id = data.data._id
       // 1. 신규 템플릿을 추가한다.
       commit(CONSTANT.REGIST_TEMPLATE_LIST, template)
       // 2. 신규 템플릿에 대한 일정은 아직 없으므로 스케줄에 default 로 셋팅한다.
-      commit(CONSTANT.SET_SCHEDULE, schedule)
+      const aSchedule = Array(...Array(MAX_CELL * MAX_ROW))
+      commit(CONSTANT.ADD_SCHEDULE, { _id: template._id, aSchedule })
       // 3. 달력의 리스트 정보를 다시 계산한다.
       commit(CONSTANT.SET_SCHEDULE_OF_CALENDAR)
     }
@@ -55,18 +55,26 @@ export default {
   },
 
   async [CONSTANT.GET_SCHEDULE]({ state, commit }) {
-    const aTemplateId = state.aTemplate.map(({ _id }) => _id)
+    const { aTemplate, oToDay: { year, month, MAX_ROW, MAX_CELL }, userId } = state
+    const aTemplateId = aTemplate.map(({ _id }) => _id)
+    const cellCnt = MAX_ROW * MAX_CELL
     const { data } = await this.$axios.post(
-      API.GET_SCHEDULE_LIST(state.userId),
-      aTemplateId
+      API.GET_SCHEDULE_LIST(userId),
+      { aTemplateId, year, month, cellCnt }
     )
 
     const schedule = data.success ? data.data.schedule : null
     commit(CONSTANT.SET_SCHEDULE, schedule)
   },
 
-  async [CONSTANT.REGIST_SCHEDULE](_, schedule) {
+  // 스케줄 등록
+  async [CONSTANT.REGIST_SCHEDULE]({ commit }, schedule) {
     const { data } = await this.$axios.post(API.REGIST_SCHEDULE, schedule)
+    if (data.success) {
+      schedule._id = data.data._id
+      commit(CONSTANT.UPDATE_SCHEDULE, schedule)
+      commit(CONSTANT.SET_SCHEDULE_OF_CALENDAR)
+    }
     return data
   }
 }

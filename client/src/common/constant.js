@@ -37,6 +37,7 @@ export default {
     year: 2019,
     month: 0,
     date: 1,
+    cellIndex: 0,
     aCourse: []
   },
   SCHEDULE_SET: { weigth: '', repeat: 0 },
@@ -69,6 +70,9 @@ export default {
 
   GET_SCHEDULE: 'getSchedule',
   SET_SCHEDULE: 'setSchedule',
+  ADD_SCHEDULE: 'addSchedule',
+  UPDATE_SCHEDULE: 'updateSchedule',
+
   SET_SCHEDULE_OF_CALENDAR: 'setScheduleOfCalendar',
   SET_SCHEDULE_OF_CALEDAR: 'setScheduleOfCaledar',
 
