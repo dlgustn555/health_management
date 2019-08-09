@@ -11,18 +11,27 @@ router.get('/', (ctx) => {
   };
 });
 
+// 스케줄 등록
+router.post('/', async (ctx) => {
+  const modDate = new Date();
+  const schedule = new Schedule({ ...ctx.request.body, modDate });
+  ctx.body = await Query.save(schedule);
+});
+
+// ALL 스케즐 조회
 router.post('/user/:userId', async (ctx) => {
   const { userId } = ctx.params;
   const aTemplateId = ctx.request.body;
-  const schedule = {}
+  const schedule = {};
 
   // eslint-disable-next-line no-restricted-syntax
   for (const templateId of aTemplateId) {
     // eslint-disable-next-line no-await-in-loop
-    const { success, data } = await Query.find(Schedule, { userId, templateId })
-    schedule[templateId] = success ? data.aResult : []
+    const { success, data } = await Query.find(Schedule, { userId, templateId });
+    schedule[templateId] = success ? data.aResult : [];
   }
-  ctx.body = { success: true, data: { schedule } }
+  ctx.body = { success: true, data: { schedule } };
 });
+
 
 module.exports = router.routes();

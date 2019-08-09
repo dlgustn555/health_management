@@ -34,7 +34,7 @@
           :key="`course_${courseIndex}`">
           <h4>
             <span class="course_no">No{{ courseIndex + 1 }}</span>. {{ course.name }}
-            {{ schedule.aCourse[courseIndex].name = course.name }}
+            <span v-show="false">{{ schedule.aCourse[courseIndex].name = course.name }}</span>
           </h4>
           <ul>
             <li
@@ -123,7 +123,16 @@ export default {
     }
   },
   methods: {
-    registSchedule() {
+    async registSchedule() {
+      const { success, data } = await this.$store.dispatch(
+        CONSTANT.REGIST_SCHEDULE,
+        this.schedule
+      )
+
+      const message = success
+        ? '등록되었습니다.'
+        : `등록에 실패 했습니다.\n${data.error.message}`
+      alert(message)
       this.closeLayer()
     },
     closeLayer() {

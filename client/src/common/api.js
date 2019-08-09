@@ -4,5 +4,7 @@ export default {
   REGIST_TEMPLATE: '/exercise/template',
   DELETE_TEMPLATE: (userId, templateId) => `/exercise/template/${userId}/${templateId}`,
   UPDATE_TEMPLATE: templateId => `/exercise/template/${templateId}`,
-  GET_SCHEDULE_LIST: userId => `/exercise/schedule/user/${userId}`
+  GET_SCHEDULE_LIST: userId => `/exercise/schedule/user/${userId}`,
+
+  REGIST_SCHEDULE: '/exercise/schedule'
 }

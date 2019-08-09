@@ -63,5 +63,10 @@ export default {
 
     const schedule = data.success ? data.data.schedule : null
     commit(CONSTANT.SET_SCHEDULE, schedule)
+  },
+
+  async [CONSTANT.REGIST_SCHEDULE](_, schedule) {
+    const { data } = await this.$axios.post(API.REGIST_SCHEDULE, schedule)
+    return data
   }
 }

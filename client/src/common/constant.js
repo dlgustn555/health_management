@@ -30,7 +30,6 @@ export default {
     course: []
   },
   SCHEDULE: {
-    _id: '',
     userId: '',
     templateId: '',
     order: 0,
@@ -79,6 +78,6 @@ export default {
   SET_LAST_SCHEDULE: 'setLastSchedule',
   SET_ORDER: 'setOrder',
   DELETE_ORDER: 'deleteOrder',
-  _SET_CELL_DATE_OF_CALENDAR: '_setCellDateOfCalendar',
-  _SET_CELL_DATE_OF_SCHEDULE: '_setCellDateOfTemplate'
+
+  REGIST_SCHEDULE: 'registSchedule'
 }
