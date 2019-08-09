@@ -14,7 +14,11 @@
         type="text"
         class="part_input"
         @input="inputPartFiled">
-      <button @click="deleteProgram(program.order)">삭제</button>
+      <img 
+        src="@/assets/images/delete.png"
+        title="삭제"
+        class="delete_program"
+        @click="deleteProgram(program.order)">
     </div>
     <div class="course_list">
       <div
@@ -103,6 +107,11 @@ export default {
 </script>
 
 <style scoped>
+.delete_program {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
 .template-form .course_list {
   max-height: 500px;
   overflow: scroll;

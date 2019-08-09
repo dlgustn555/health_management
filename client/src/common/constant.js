@@ -29,6 +29,23 @@ export default {
     part: '',
     course: []
   },
+  SCHEDULE: {
+    _id: '',
+    userId: '',
+    templateId: '',
+    order: 0,
+    part: '',
+    year: 2019,
+    month: 0,
+    date: 1,
+    aCourse: []
+  },
+  SCHEDULE_SET: { weigth: '', repeat: 0 },
+  SCHEDULE_COURSE: {
+    name: '',
+    aSet: [],
+    condition: ''
+  },
 
   SET_LOGIN_INFO: '',
   SET_TODAY: 'SetToday',

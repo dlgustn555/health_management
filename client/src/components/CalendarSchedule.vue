@@ -2,8 +2,9 @@
   <div>
     <schedule-layer
       v-if="isShow"
-      :o-cell-date="oCellDate"
       :schedule="schedule"
+      :selected-day="selectedDay"
+      :template="template"
       @hideLayer="isShow=false" />
     <div class="week week_head">
       <div
@@ -25,16 +26,17 @@
         <div v-if="oCellDate.isShow">
           <span>{{ oCellDate.date }}</span>
           <div
-            v-for="onTag in onTags"
-            :key="onTag._id"
+            v-for="{ _id, tag } in onTags"
+            :key="_id"
             :class="{ opacity_6: oCellDate.isBiggerThanToDay }"
             class="field">
             <a
-              v-if="oCellDate.aSchedule[onTag._id] && oCellDate.aSchedule[onTag._id].isShowTag"
-              :class="{ dotted: oCellDate.aSchedule[onTag._id].isDotted, fill: oCellDate.aSchedule[onTag._id].isFill }"
+              v-if="oCellDate.aSchedule[_id] && oCellDate.aSchedule[_id].isShowTag"
+              :class="{ dotted: oCellDate.aSchedule[_id].isDotted, fill: oCellDate.aSchedule[_id].isFill }"
               href="#"
-              class="category_button">
-              {{ onTag.tag }} {{ oCellDate.aSchedule[onTag._id].part !== '' ? `- ${oCellDate.aSchedule[onTag._id].part}` : '' }}
+              class="category_button"
+              @click="showScheduleLayer(oCellDate, _id)">
+              {{ tag }} {{ oCellDate.aSchedule[_id].part !== '' ? `- ${oCellDate.aSchedule[_id].part}` : '' }}
             </a>
           </div>
         </div>
@@ -45,6 +47,9 @@
 
 <script>
 import { mapState } from 'vuex'
+import cloneDeep from 'lodash/cloneDeep'
+import { createSchedule } from '@/common'
+import L from '@/common/lazy'
 import CONTANT from '@/common/constant'
 import ScheduleLayer from '@/components/layer/ScheduleLayer.vue'
 
@@ -55,12 +60,13 @@ export default {
     return {
       DAYS: CONTANT.DAYS,
       isShow: false,
-      oCellDate: null,
-      schedule: null
+      schedule: null,
+      template: null,
+      selectedDay: 0
     }
   },
   computed: {
-    ...mapState(['oToDay', 'aCalendarDate', 'aTag']),
+    ...mapState(['oToDay', 'aCalendarDate', 'aTag', 'aTemplate', 'userId']),
     onTags() {
       return this.aTag.filter(tag => tag.isOn)
     }
@@ -72,21 +78,35 @@ export default {
       return this.aCalendarDate.slice(begin, end)
     },
 
-    registSchedule(oCellDate) {
-      if (!oCellDate.isShow || oCellDate.date > this.oToDay.todayDate) {
-        return
-      }
+    showScheduleLayer(oCellDate, tagId) {
+      const { isFill, schedule, part } = oCellDate.aSchedule[tagId]
+      const [template] = L.take(
+        1,
+        L.filter(({ _id }) => _id === tagId, this.aTemplate)
+      )
       this.isShow = true
-      this.oCellDate = oCellDate
-    },
+      this.selectedDay = oCellDate.day
+      this.template = template
 
-    registScheduleFromCategory(oCellDate, schedule = null) {
-      if (!oCellDate.isShow) {
+      if (isFill) {
+        this.schedule = cloneDeep(schedule)
         return
       }
-      this.isShow = true
-      this.oCellDate = oCellDate
-      this.schedule = schedule
+      const [{ course, order }] = L.take(
+        1,
+        L.filter(program => program.part === part, template.programs)
+      )
+
+      this.schedule = {
+        ...createSchedule(course),
+        userId: this.userId,
+        templateId: tagId,
+        order,
+        part,
+        year: this.oToDay.year,
+        month: this.oToDay.month,
+        date: oCellDate.date
+      }
     }
   }
 }

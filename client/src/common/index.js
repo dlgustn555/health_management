@@ -14,4 +14,16 @@ const createProgram = (count, order) => {
   return aProgram
 }
 
-export { createProgram }
+const createSchedule = course => {
+  const schedule = cloneDeep(CONSTANT.SCHEDULE)
+  for (const cs of course) {
+    const newCourse = cloneDeep(CONSTANT.SCHEDULE_COURSE)
+    for (let i = 0, end = parseInt(cs.set, 10); i < end; i++) {
+      newCourse.aSet.push(cloneDeep(CONSTANT.SCHEDULE_SET))
+    }
+    schedule.aCourse.push(newCourse)
+  }
+  return schedule
+}
+
+export { createProgram, createSchedule }

@@ -127,10 +127,10 @@ ul.template-list {
   cursor: pointer;
 }
 .template-list li img:last-child {
-  top: -11px;
-  left: 21px;
-  width: 13px;
-  height: 13px;
+  top: -12px;
+  left: 22px;
+  width: 15px;
+  height: 15px;
 }
 button {
   float: right;

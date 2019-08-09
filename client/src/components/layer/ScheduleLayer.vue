@@ -2,65 +2,105 @@
   <div class="layer">
     <div class="dimmd" />
     <div class="content">
-      <div class="field">
-        <span class="date">{{ oToDay.year }}. {{ oToDay.month + 1 }}. {{ oCellDate.date }}. {{ DAYS[oCellDate.day].name }}요일.</span>
+      <div class="field date">
+        <span>{{ schedule.year }}. {{ schedule.month + 1 }}. {{ schedule.date }}. {{ DAYS[selectedDay].name }}요일.</span>
         <a
           href="#"
           class="category_button fill"
           @click.prevent.stop>
-          {{ schedule.category }}
+          {{ template.tag }}
         </a>
-        <div class="field">
-          <h3>♣ {{ program.order }}일차 - {{ program.part }} ♣</h3>
-        </div>
       </div>
-      <div class="programs">
+      <div class="field program_part">
+        <h3>
+          <span>♣</span>
+          <span class="program_order">{{ schedule.order }} 일차</span>
+          -
+          <select>
+            <option
+              v-for="{ order, part } in template.programs"
+              :key="order"
+              :selected="order === schedule.order"
+              :value="order">
+              {{ part }}
+            </option>
+          </select>
+          <span>♣</span>
+        </h3>
+      </div>
+      <div class="course_list">
         <div
-          v-for="({ name, set, unit }, index) in program.templates"
-          :key="`template_${index}`"
-          class="field">
-          <label>{{ name }}</label>
+          v-for="(course, courseIndex) in program.course"
+          :key="`course_${courseIndex}`">
+          <h4>
+            <span class="course_no">No{{ courseIndex + 1 }}</span>. {{ course.name }}
+            {{ schedule.aCourse[courseIndex].name = course.name }}
+          </h4>
           <ul>
             <li
-              v-for="s in set"
-              :key="`template_${index}_set_${s}`">
-              <label>{{ s }} Set</label>
-              :
-              <input type="text">
-              <label>{{ unit }}</label>
+              v-for="(set, setIndex) in course.set"
+              :key="`set_${setIndex}`">
+              <label>{{ setIndex + 1 }} Set</label>
+              -
+              <input
+                v-model="schedule.aCourse[courseIndex].aSet[setIndex].weigth"
+                type="text"
+                class="unit_value">
+              {{ course.unit }}
               <img
-                class="mult_img"
-                src="@/assets/images/x.png">
-              <input type="number">
-              <label>회</label>
+                src="@/assets/images/x.png"
+                class="x_icon">
+              <input
+                v-model="schedule.aCourse[courseIndex].aSet[setIndex].repeat"
+                type="number"
+                min="1"
+                class="repeat"> 회
+              <img
+                src="@/assets/images/delete.png"
+                class="delete">
             </li>
             <li>
-              <textarea rows="4" />
+              <label />
+              <span
+                class="course_plush"
+                title="추가">
+                <img src="@/assets/images/plus.png">
+              </span>
+            </li>
+            <li>
+              <label>컨디션</label>
+              :
+              <textarea
+                v-model="schedule.aCourse[courseIndex].condition"
+                rows="3" />
             </li>
           </ul>
         </div>
       </div>
       <div class="field_button">
-        <button>등록</button>
-        <button @click="$emit('hideLayer')">닫기</button>
+        <button @click="registSchedule">등록</button>
+        <button @click="closeLayer">닫기</button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import L from '@/common/lazy'
 import CONSTANT from '@/common/constant'
+import L from '@/common/lazy'
 
 export default {
   name: 'ScheduleLayer',
   props: {
-    oCellDate: {
+    schedule: {
       type: Object,
       default: null
     },
-    schedule: {
+    selectedDay: {
+      type: Number,
+      default: 0
+    },
+    template: {
       type: Object,
       default: null
     }
@@ -71,41 +111,68 @@ export default {
     }
   },
   computed: {
-    ...mapState(['oToDay', 'aTemplate']),
     program() {
-      const { templateId, order } = this.schedule
       const [program] = L.take(
         1,
         L.filter(
-          program => program.order === order,
-          ...L.map(
-            ({ programs }) => programs,
-            L.filter(template => template._id === templateId, this.aTemplate)
-          )
+          ({ order }) => order === this.schedule.order,
+          this.template.programs
         )
       )
       return program
+    }
+  },
+  methods: {
+    registSchedule() {
+      this.closeLayer()
+    },
+    closeLayer() {
+      this.$emit('hideLayer')
     }
   }
 }
 </script>
 
 <style lang="css" scoped>
+.course_no {
+  font-size: 10px;
+}
+.course_plush {
+  text-align: center;
+  display: inline-block;
+  margin-left: 12px;
+  width: 225px;
+}
+.course_plush:hover {
+  cursor: pointer;
+  background-color: rgba(115, 84, 201, 0.3);
+}
+.course_plush img {
+  margin-top: 3px;
+  width: 23px;
+  height: 23px;
+}
+input {
+  padding-right: 10px;
+}
+input.unit_value {
+  width: 80px;
+  text-align: right;
+}
+input.repeat {
+  width: 50px;
+  text-align: right;
+}
 .content {
   min-width: 800px;
   max-width: 800px;
-  max-height: 950px;
-}
-.programs {
-  overflow: scroll;
-  max-height: 700px;
+  height: 950px;
 }
 .date {
-  font-weight: bold;
+  text-align: right;
 }
-.mult_img {
-  width: 18px;
-  height: 18px;
+.date span {
+  font-weight: bold;
 }
 .field ul {
   width: 100%;
@@ -122,5 +189,49 @@ export default {
 .field ul li textarea {
   width: 500px;
   padding: 10px;
+}
+.program_part {
+  margin-bottom: 30px;
+}
+.program_part select {
+  padding: 0px 20px;
+  font-size: 20px;
+  font-weight: bold;
+}
+.course_list {
+  height: 500px;
+  padding-bottom: 200px;
+  overflow: scroll;
+}
+.course_list > div {
+  margin-bottom: 35px;
+}
+.course_list h4 {
+  border-radius: 10px;
+  padding: 5px 10px;
+  background: rgba(160, 82, 45, 0.5);
+  margin-bottom: 10px;
+  margin-right: 20px;
+}
+.course_list li {
+  margin-bottom: 5px;
+}
+.course_list li label {
+  display: inline-block;
+  width: 200px;
+  text-align: right;
+}
+.course_list li textarea {
+  width: 60%;
+  padding: 5px;
+}
+img.x_icon {
+  width: 10px;
+  height: 10px;
+}
+img.delete {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
 }
 </style>
