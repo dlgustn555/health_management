@@ -12,6 +12,8 @@
           @input="inputCategoryField">
       </div>
       <div class="field">
+        <label><span>●</span> 운동요일</label>
+        :
         <span class="day_checkbox">
           <input
             id="day_checkbox_all"
@@ -58,7 +60,6 @@
           {{ `${order === 1 ? '' : ', '}${part === '' ? '____' : part}` }}
         </span>
       </div>
-
       <div
         v-swiper:templateWriteFromSwiper="swiperOption"
         class="templateWriteFromSwiper field">
@@ -72,7 +73,13 @@
             @deleteProgram="deleteSeletedProgram"
           />
         </div>
-      </div>
+        <div
+          class="swiper-button-prev"
+          @click="nextSlide" />
+        <div
+          class="swiper-button-next"
+          @click="nextSlide" />
+      </div> 
       <div class="field_button">
         <button @click="templateType ==='new' ? registTemplate() : modifyTemplate()">
           {{ templateType === 'new' ? '등록' : '수정' }}
@@ -110,9 +117,11 @@ export default {
       isAll: false,
       DAYS: CONSTANT.DAYS,
       swiperOption: {
+        speed: 400,
         spaceBetween: 7,
-        pagination: {
-          el: '.swiper-pagination'
+        allowTouchMove: false,
+        keyboard: {
+          enabled: true
         }
       }
     }
@@ -126,6 +135,14 @@ export default {
     this.isAll = this.template.days.length === 7
   },
   methods: {
+    nextSlide() {
+      const { activeIndex, slides, slideNext } = this.templateWriteFromSwiper
+      if (activeIndex + 1 === slides.length) {
+        return
+      }
+      slideNext()
+    },
+
     toggleDays() {
       this.isAll = !this.isAll
       const allDays = this.DAYS.START_SUNDAY.map(({ value }) => value)

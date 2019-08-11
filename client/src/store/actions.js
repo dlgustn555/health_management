@@ -48,6 +48,7 @@ export default {
     return data
   },
 
+  // 템플릿 리스트 조회
   async [CONSTANT.GET_TEMPLATE_LIST]({ state, commit }) {
     const { data } = await this.$axios.get(API.GET_TEMPLATE_LIST(state.userId))
     const aTemplate = data.success ? data.data.aResult : []

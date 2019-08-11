@@ -50,11 +50,6 @@ export default {
   SET_LOGIN_INFO: '',
   SET_TODAY: 'SetToday',
 
-  INIT_PROGRAM: 'initProgram',
-  ADD_PROGRAM: 'addProgram',
-  REMOVE_PROGRAM: 'removeProgram',
-  UPDATE_PROGRAM: 'updateProgram',
-
   REGIST_TEMPLATE: 'registTemplate',
   DELETE_TEMPLATE: 'deleteTemplate',
   MODIFY_TEMPLATE: 'modifyTemplate',
@@ -74,12 +69,7 @@ export default {
   UPDATE_SCHEDULE: 'updateSchedule',
 
   SET_SCHEDULE_OF_CALENDAR: 'setScheduleOfCalendar',
-  SET_SCHEDULE_OF_CALEDAR: 'setScheduleOfCaledar',
 
-  SET_CATEGORY_LIST: 'setCategoryList',
-  SET_CALENDAR_DATE_LIST: 'setCalendarDateList',
-
-  SET_LAST_SCHEDULE: 'setLastSchedule',
   SET_ORDER: 'setOrder',
   DELETE_ORDER: 'deleteOrder',
 

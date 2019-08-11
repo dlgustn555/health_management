@@ -97,16 +97,6 @@ export default {
     state.schedule[schedule.templateId].splice(schedule.cellIndex, 1, schedule)
   },
 
-  // 달력의 날짜 정보 셋팅
-  [CONSTANT.SET_CALENDAR_DATE_LIST](state, aCalendarDate) {
-    state.aCalendarDate = aCalendarDate
-  },
-
-  // 가장 마지막 등록된 스케줄 정보 저장
-  [CONSTANT.SET_LAST_SCHEDULE](state, lastSchedule) {
-    state.lastSchedule[lastSchedule.templateId] = lastSchedule
-  },
-
   // 다음번 실행할 프로그램 ORDER 저장
   [CONSTANT.SET_ORDER](state, { tagId, order }) {
     state.order[tagId] = order

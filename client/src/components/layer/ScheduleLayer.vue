@@ -26,6 +26,18 @@
             </option>
           </select>
           <span>♣</span>
+          <span class="weigth">
+            <a
+              :class="{ fill: isShowWeight }"
+              href="#"
+              class="category_button"
+              @click="isShowWeight = !isShowWeight"
+            >보이기</a>
+            몸무게 :
+            <span v-show="isShowWeight">
+              <input type="text"> Kg
+            </span>
+          </span>
         </h3>
       </div>
       <div class="course_list">
@@ -33,7 +45,7 @@
           v-for="(course, courseIndex) in program.course"
           :key="`course_${courseIndex}`">
           <h4>
-            <span class="course_no">No{{ courseIndex + 1 }}</span>. {{ course.name }}
+            <span class="course_no">No{{ courseIndex + 1 }}</span> {{ course.name }}
             <span v-show="false">{{ schedule.aCourse[courseIndex].name = course.name }}</span>
           </h4>
           <ul>
@@ -107,7 +119,8 @@ export default {
   },
   data() {
     return {
-      DAYS: CONSTANT.DAYS.START_SUNDAY
+      DAYS: CONSTANT.DAYS.START_SUNDAY,
+      isShowWeight: true
     }
   },
   computed: {
@@ -142,6 +155,26 @@ export default {
 </script>
 
 <style lang="css" scoped>
+.program_part {
+  height: 35px;
+}
+.weigth {
+  font-size: 15px;
+  float:right;
+  margin-right: 20px;
+}
+.weigth input {
+  width: 65px;
+  text-align: right;
+}
+.weigth a.category_button {
+  font-size: 10px;
+  height:5px;
+  border: 1px solid #ff5675;
+}
+.weigth .category_button.fill {
+  background: #ff5675;
+}
 .course_no {
   font-size: 10px;
 }

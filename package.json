@@ -2,8 +2,9 @@
   "name": "health",
   "version": "1.0.0",
   "scripts": {
+    "client:install": "cd client && yarn install",
     "client:dev": "cd client && yarn dev",
-
+    "server:install": "cd server && yarn install",
     "server:dev:home": "cd server && yarn dev:home",
     "server:dev": "cd server && yarn dev"
   }

@@ -1,11 +1,11 @@
 <template>
   <div class="template-form">
-    <div class="field">
-      <label>
+    <div class="field program_part">
+      <h3>
         <span>♣</span>
         {{ program.order }} 일차 프로그램
         <span>♣</span>
-      </label>
+      </h3>
     </div>
     <div class="field">
       <input
@@ -25,6 +25,7 @@
         v-for="(course, courseIndex) in program.course"
         :key="`template_${courseIndex}`"
         :class="`template_field ${courseIndex % 2 ? 'even' : 'odd'}`">
+        <span class="course_no">No{{ courseIndex + 1 }}</span>
         <input
           v-model="course.name"
           placeholder="벤치 프레스"
@@ -52,11 +53,11 @@
         </select>
         <button @click="deleteCourse(courseIndex)">X</button>
       </div>
-    </div>
-    <div
-      class="template_field add_course"
-      @click="addCourse">
-      + 추가
+      <div
+        class="template_field add_course"
+        @click="addCourse">
+        + 추가
+      </div>
     </div>
   </div>
 </template>
@@ -107,13 +108,28 @@ export default {
 </script>
 
 <style scoped>
+.course_no {
+  font-weight: bold;
+  font-size: 10px;
+}
+.program_part {
+  margin-top: 0px;
+}
+.program_part h3 {
+  border-radius: 10px;
+  padding: 5px 0px;
+  background: rgba(160, 82, 45, 0.5);
+}
 .delete_program {
   width: 20px;
   height: 20px;
   cursor: pointer;
 }
+.template-form {
+  text-align: center;
+}
 .template-form .course_list {
-  max-height: 500px;
+  max-height: 450px;
   overflow: scroll;
 }
 .template_field {

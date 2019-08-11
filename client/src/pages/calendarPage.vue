@@ -53,7 +53,7 @@ div.layer {
   width: 100%;
   height: 100%;
   z-index: 100;
-  padding-top: 100px;
+  padding-top: 60px;
 }
 div.layer .dimmd {
   position: absolute;
@@ -84,7 +84,7 @@ div.layer .content {
   margin: 10px 0px;
 }
 .field_button {
-  padding-top: 30px;
+  padding-top: 20px;
 }
 .category_button {
   margin: 0px 2px;
