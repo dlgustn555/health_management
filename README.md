@@ -1,3 +1,9 @@
+### 전제
+concurrently 가 global 로 설치 되어 있어야 합니다.
+```
+yarn global add concurrently
+```
+
 ### 목적
 1. vue, node, es 등등 개발 스터디
 - 하고 싶은것들 다 해보자.
