@@ -74,11 +74,11 @@
           />
         </div>
         <div
-          class="swiper-button-prev"
-          @click="nextSlide" />
+          slot="button-prev" 
+          class="swiper-button-prev" />
         <div
-          class="swiper-button-next"
-          @click="nextSlide" />
+          slot="button-next"
+          class="swiper-button-next" />
       </div> 
       <div class="field_button">
         <button @click="templateType ==='new' ? registTemplate() : modifyTemplate()">

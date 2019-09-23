@@ -2,6 +2,8 @@
   "name": "health",
   "version": "1.0.0",
   "scripts": {
+    "install": "concurrently \"yarn client:install\" \"yarn server:install\"",
+    "start": "concurrently \"yarn client:dev\" \"yarn server:dev:home\"",
     "client:install": "cd client && yarn install",
     "client:dev": "cd client && yarn dev",
     "server:install": "cd server && yarn install",
