@@ -3,7 +3,7 @@ export default () => ({
   userId: '',
   aTemplate: [],
   aTag: [],
-  schedule: {},
+  oSchedule: {},
   oToDay: {
     year: 0,
     month: 0,
@@ -16,9 +16,6 @@ export default () => ({
     START_DAY: 'SUNDAY'
   },
   aCalendarDate: [],
-  lastSchedule: {
-    // 템플릿ID: schedule
-  },
   order: {
     // 템플릿ID: 숫자
   }

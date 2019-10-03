@@ -8,9 +8,9 @@
 
 <script>
 import CONSTANT from '@/common/constant'
-import CalendarDateSelector from '@/components/CalendarDateSelector.vue'
-import TemplateTag from '@/components/TemplateTag.vue'
-import CalendarSchedule from '@/components/CalendarSchedule.vue'
+import CalendarDateSelector from '@/components/calendar/CalendarDateSelector.vue'
+import TemplateTag from '@/components/calendar/TemplateTag.vue'
+import CalendarSchedule from '@/components/calendar/CalendarSchedule.vue'
 
 export default {
   name: 'CalendarPage',

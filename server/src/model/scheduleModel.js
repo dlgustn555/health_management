@@ -8,6 +8,7 @@ const ScheduleSchema = new mongoose.Schema({
   year: { type: Number, require: true },
   month: { type: Number, require: true },
   date: { type: Number, require: true },
+  day: { type: Number, require: true },
   cellIndex: { type: Number, require: true },
   aCourse: { type: Array, required: true },
   modDate: { type: Date, required: false }

@@ -11,6 +11,7 @@
           {{ template.tag }}
         </a>
       </div>
+      <!-- 
       <div class="field program_part">
         <h3>
           <span>♣</span>
@@ -93,6 +94,7 @@
         <button @click="registSchedule">등록</button>
         <button @click="closeLayer">닫기</button>
       </div>
+      -->
     </div>
   </div>
 </template>
@@ -104,18 +106,7 @@ import L from '@/common/lazy'
 export default {
   name: 'ScheduleLayer',
   props: {
-    schedule: {
-      type: Object,
-      default: null
-    },
-    selectedDay: {
-      type: Number,
-      default: 0
-    },
-    template: {
-      type: Object,
-      default: null
-    }
+    schedule: Object
   },
   data() {
     return {

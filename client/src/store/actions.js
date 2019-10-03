@@ -64,8 +64,8 @@ export default {
       { aTemplateId, year, month, cellCnt }
     )
 
-    const schedule = data.success ? data.data.schedule : null
-    commit(CONSTANT.SET_SCHEDULE, schedule)
+    const oSchedule = data.success ? data.data.schedule : null
+    commit(CONSTANT.SET_SCHEDULE, oSchedule)
   },
 
   // 스케줄 등록

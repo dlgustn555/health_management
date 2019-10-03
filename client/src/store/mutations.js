@@ -2,6 +2,14 @@
 import CONSTANT from '@/common/constant'
 import L from '@/common/lazy'
 
+export const getPart = (schedule, programs, order) => {
+  if (!!schedule) {
+    return schedule.part
+  }
+  const index = order % programs.length
+  return programs[index].part 
+}
+
 export default {
   // 로그인 정보
   [CONSTANT.SET_LOGIN_INFO](state, { login, userId }) {
@@ -12,9 +20,9 @@ export default {
   // 템플릿 리스트 셋팅
   [CONSTANT.SET_TEMPLATE_LIST](state, aTemplate) {
     state.aTemplate = aTemplate
-    const aTag = aTemplate.map(({ _id, tag }) => {
-      return { _id, tag, isOn: true }
-    })
+    const aTag = aTemplate.map(
+      ({ _id, tag }) => ({ _id, tag, isOn: true })
+    )
     state.aTag = aTag
   },
 
@@ -62,7 +70,7 @@ export default {
   [CONSTANT.SET_TODAY](state) {
     const { oToDay } = state
 
-    const oDate = new Date()
+    const oDate = new Date('2019-09-22')
     oToDay.year = oDate.getFullYear()
     oToDay.month = oDate.getMonth()
     oToDay.todayDate = oDate.getDate()
@@ -85,16 +93,16 @@ export default {
   },
 
   // 달력의 스캐줄 정보 셋팅
-  [CONSTANT.SET_SCHEDULE](state, schedule) {
-    state.schedule = schedule
+  [CONSTANT.SET_SCHEDULE](state, oSchedule) {
+    state.oSchedule = oSchedule
   },
 
   [CONSTANT.ADD_SCHEDULE](state, { _id, aSchedule }) {
-    state.schedule[_id] = aSchedule
+    state.oSchedule[_id] = aSchedule
   },
 
   [CONSTANT.UPDATE_SCHEDULE](state, schedule) {
-    state.schedule[schedule.templateId].splice(schedule.cellIndex, 1, schedule)
+    state.oSchedule[schedule.templateId].splice(schedule.cellIndex, 1, schedule)
   },
 
   // 다음번 실행할 프로그램 ORDER 저장
@@ -107,90 +115,59 @@ export default {
   },
 
   [CONSTANT.SET_SCHEDULE_OF_CALENDAR](state) {
-    const { oToDay, aTemplate, schedule, lastSchedule, order } = state
+    const { aTemplate, oSchedule } = state
+    const {
+      MAX_ROW,
+      MAX_CELL,
+      startDay,
+      lastDate,
+      todayDate
+    } = state.oToDay
+    
+    let order = 0
     const aCalendarDate = Array.apply(
       null,
-      Array(oToDay.MAX_ROW * oToDay.MAX_CELL)
-    ).map((_, cellIndex) => {
-      const oCellDate = {
-        date: 0,
-        day: cellIndex % oToDay.MAX_CELL,
-        cellIndex,
-        isShow: false,
-        isBiggerThanToDay: false,
-        aSchedule: {}
-      }
-
-      if (cellIndex === 0 && cellIndex === oToDay.startDay) {
-        oCellDate.date = 1
-        oCellDate.isShow = true
-      } else if (cellIndex >= oToDay.startDay) {
-        oCellDate.date = cellIndex - oToDay.startDay + 1
-        oCellDate.isShow = oCellDate.date <= oToDay.lastDate
-        oCellDate.isBiggerThanToDay = oCellDate.date > oToDay.todayDate
-      }
-
-      for (const tagId in schedule) {
-        const scheduleOfcell = schedule[tagId][cellIndex]
-        oCellDate.aSchedule[tagId] = {
-          isShowTag: false, // true: 태그를 보여준다. v-show=true
-          isFill: false, // true: 태그에 클래스 fill 를 붙인다. = 꽉찬 태그
-          isDotted: false,
-          schedule: scheduleOfcell
+      Array(MAX_ROW * MAX_CELL)
+    ).map(
+      (_, cellIndex) => {
+        const oCellDate = {
+          day: cellIndex % MAX_CELL,
+          cellIndex,
+          date: 0,
+          isShow: false,
+          isPast: true,
+          aSchedule: []
         }
 
-        const [template] = L.take(
-          1,
-          L.filter(template => template._id === tagId, aTemplate)
-        )
-
-        //  CASE1. 과거인데 운동한 적이 있다.
-        if (oCellDate.date < oToDay.todayDate && !!scheduleOfcell) {
-          oCellDate.aSchedule[tagId].isShowTag = true
-          oCellDate.aSchedule[tagId].isFill = true
-          oCellDate.aSchedule[tagId].part = scheduleOfcell.part
-          state.lastSchedule[scheduleOfcell.templateId] = scheduleOfcell
-          state.order[tagId] = scheduleOfcell.order
-          // CASE 2. 현재 : 만약 템플릿 삭제한 경우, 과의것만 보여주고, 오늘부터는 안보여 준다.
-        } else if (oCellDate.date === oToDay.todayDate && template && template.days.some(day => day === oCellDate.day)) {
-          oCellDate.aSchedule[tagId].isShowTag = true
-          oCellDate.aSchedule[tagId].isFill = !!scheduleOfcell
-          // 오늘 등록한게 있다.
-          if (!!scheduleOfcell) {
-            oCellDate.aSchedule[tagId].part = scheduleOfcell.part
-            state.lastSchedule[scheduleOfcell.templateId] = scheduleOfcell
-            state.order[tagId] = scheduleOfcell.order
-            continue
-          }
-
-          // 과거 언젠가 마지막으로 등록한게 있다.
-          if (!!lastSchedule[tagId]) {
-            template.programs[0].part = lastSchedule[tagId].part
-            state.order[tagId] = lastSchedule[tagId].order
-            continue
-          }
-
-          oCellDate.aSchedule[tagId].part = template.programs[0].part
-          state.order[tagId] = template.programs[0].order
-          // CASE 3. 미래 : 만약 템플릿 삭제한 경우, 과의것만 보여주고, 오늘부터는 안보여 준다.
-        } else if (oCellDate.date > oToDay.todayDate && template &&  template.days.some(day => day === oCellDate.day)) {
-          oCellDate.aSchedule[tagId].isShowTag = true
-          oCellDate.aSchedule[tagId].isDotted = true
-          
-          if (template.programs.length === 1) {
-            oCellDate.aSchedule[tagId].part = template.programs[0].part
-            continue
-          }
-
-          const nowOrder = order[tagId] || 0
-          oCellDate.aSchedule[tagId].part = template.programs[nowOrder].part
-          const nextOrder = (nowOrder + 1) % template.programs.length
-          state.order[tagId] = nextOrder
+        // STEP 1: 날짜 Setting
+        if (cellIndex === 0 && cellIndex === startDay) {
+          oCellDate.date = 1
+          oCellDate.isShow = true
+        } else if (cellIndex >= startDay) {
+          oCellDate.date = cellIndex - startDay + 1
+          oCellDate.isShow = oCellDate.date <= lastDate
         }
-      }
 
-      return oCellDate
-    })
+        // STEP 2: 태그 Setting
+        for (const { _id, tag, days, programs } of aTemplate) {
+          const schedule= oSchedule[_id][cellIndex]
+          const isExerciseDay = days.some(exerciseDay => exerciseDay === oCellDate.day)
+          const isShowTag = isExerciseDay && (!!schedule || oCellDate.date >= todayDate)
+          // isShowTag: isOn && (!!schedule || oCellDate.date >= todayDate),
+
+          oCellDate.aSchedule.push({
+            _id,
+            buttonType: !schedule ? 'category_button dotted' : 'category_button fill',
+            isShowTag,
+            tag,
+            part: isShowTag ? getPart(schedule, programs, order++) : '',
+            schedule
+          })
+        }
+
+        return oCellDate
+      }
+    )
     state.aCalendarDate = aCalendarDate
   }
 }

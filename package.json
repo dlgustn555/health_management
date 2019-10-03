@@ -9,5 +9,9 @@
     "server:install": "cd server && yarn install",
     "server:dev:home": "cd server && yarn dev:home",
     "server:dev": "cd server && yarn dev"
+  },
+  "dependencies": {
+    "concurrently": "^4.1.2",
+    "global": "^4.4.0"
   }
 }
