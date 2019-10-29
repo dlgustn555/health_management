@@ -6,11 +6,13 @@
     <p>isNaverApp: {{ isNaverApp }}</p>
     <p>serviceCode: {{ getNaverAPPInfo().serviceCode }}</p>
     <p>appVersion: {{ getNaverAPPInfo().appVersion }}</p>
-    <a :href="aodUrl">페이 홈으로 이동</a>
+    <a
+      href="/#"
+      @click.prevent="friendsAgreemntUrl">친구이용동의 약관</a>
   </div>
 </template>
 <script>
-import { getUA } from 'mobile-device-detect'
+import { getUA, isAndroid, isIOS } from 'mobile-device-detect'
 const naverAppUserAgentRegEx = /NAVER\([inapp|higgs]+;[^0-9]*search;[^0-9]*(\d+);[^0-9]*(\d+.\d+.\d+).*\)/gim
 
 export default {
@@ -18,9 +20,8 @@ export default {
     return {
       userAgent: getUA,
       naverAppUserAgentRegEx,
-      aodUrl: `intent://inappbrowser?version=30&url=${encodeURIComponent(
-        'https://dev.friends.naver.com/home?svc=pay&url=https://new-alpha-m.pay.naver.com/#/'
-      )}#Intent;scheme=naversearchapp;action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;package=com.nhn.android.search;end`
+      friends: 'https://dev.friends.naver.com',
+      pay: 'https://new-alpha-m.pay.naver.com'
     }
   },
   computed: {
@@ -51,6 +52,29 @@ export default {
             serviceCode: this.matchingData[1],
             appVersion: this.matchingData[2]
           }
+    },
+    friendsAgreemntUrl() {
+      if (this.isNaverApp) {
+        return `${this.friends}/home?svc=pay&url=${encodeURIComponent(
+          this.pay
+        )}`
+      } else if (isAndroid || isIOS) {
+        // return `${encodeURIComponent(this.friends)}/home?svc=pay&url=${encodeURIComponent(this.pay)}`
+        return `intent://inappbrowser?version=30&url=${encodeURIComponent(
+          `${this.friends}/home?svc=pay&url=`
+        )}${
+          this.pay
+        }#Intent;scheme=naversearchapp;action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;package=com.nhn.android.search;end`
+        if (isIOS) {
+          const appstoreUrl = 'http://itunes.apple.com/kr/app/id393499958?mt=8'
+          const clickedAt = +new Date()
+          setTimeout(() => {
+            if (+new Date() - clickedAt < 2000) {
+              window.locataion.href = appstoreUrl
+            }
+          }, 1500)
+        }
+      }
     }
   }
 }
