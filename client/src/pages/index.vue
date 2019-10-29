@@ -19,7 +19,7 @@ export default {
       userAgent: getUA,
       naverAppUserAgentRegEx,
       aodUrl: `intent://inappbrowser?version=30&url=${encodeURIComponent(
-        'http://new-alpha-m.pya.naver.com'
+        'https://dev.friends.naver.com/home?svc=pay&url=https://new-alpha-m.pay.naver.com/#/'
       )}#Intent;scheme=naversearchapp;action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;package=com.nhn.android.search;end`
     }
   },
