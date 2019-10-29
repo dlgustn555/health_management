@@ -6,9 +6,10 @@
     <p>isNaverApp: {{ isNaverApp }}</p>
     <p>serviceCode: {{ getNaverAPPInfo().serviceCode }}</p>
     <p>appVersion: {{ getNaverAPPInfo().appVersion }}</p>
-    <p>isIOS: {{ isIOS }}</p>
-    <a href="http://itunes.apple.com/kr/app/id393499958?mt=8">Apple Store > Naver</a>
-
+    <p>isAndroid: {{ isAndroid ? ' TRUE' : 'FALSE' }}</p>
+    <p>isIOS: {{ isIOS ? 'TRUE' : 'FALSE' }}</p>
+    <a href="http://itunes.apple.com/kr/app/id393499958?mt=8">Apple Store Naver</a>
+    <br>
     <a
       href="/#"
       @click.prevent="friendsAgreemntUrl">친구이용동의 약관</a>
