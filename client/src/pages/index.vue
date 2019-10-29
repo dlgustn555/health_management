@@ -55,12 +55,12 @@ export default {
     },
     friendsAgreemntUrl() {
       if (this.isNaverApp) {
-        return `${this.friends}/home?svc=pay&url=${encodeURIComponent(
-          this.pay
-        )}`
+        window.location.href = `${
+          this.friends
+        }/home?svc=pay&url=${encodeURIComponent(this.pay)}`
       } else if (isAndroid || isIOS) {
         // return `${encodeURIComponent(this.friends)}/home?svc=pay&url=${encodeURIComponent(this.pay)}`
-        return `intent://inappbrowser?version=30&url=${encodeURIComponent(
+        window.location.href = `intent://inappbrowser?version=30&url=${encodeURIComponent(
           `${this.friends}/home?svc=pay&url=`
         )}${
           this.pay
