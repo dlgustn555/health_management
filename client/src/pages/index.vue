@@ -6,7 +6,7 @@
     <p>isNaverApp: {{ isNaverApp }}</p>
     <p>serviceCode: {{ getNaverAPPInfo().serviceCode }}</p>
     <p>appVersion: {{ getNaverAPPInfo().appVersion }}</p>
-    <a href="intent://qmenu=voicerecg&version=1#Intent;scheme=naversearchapp;action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;package=com.nhn.android.search;end">페이 홈으로 이동</a>
+    <a :href="aodUrl">페이 홈으로 이동</a>
   </div>
 </template>
 <script>
@@ -17,7 +17,10 @@ export default {
   data() {
     return {
       userAgent: getUA,
-      naverAppUserAgentRegEx
+      naverAppUserAgentRegEx,
+      aodUrl: `intent://inappbrowser?version=30&url=${encodeURIComponent(
+        'http://new-alpha-m.pya.naver.com'
+      )}#Intent;scheme=naversearchapp;action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;package=com.nhn.android.search;end`
     }
   },
   computed: {
