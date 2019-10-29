@@ -6,6 +6,9 @@
     <p>isNaverApp: {{ isNaverApp }}</p>
     <p>serviceCode: {{ getNaverAPPInfo().serviceCode }}</p>
     <p>appVersion: {{ getNaverAPPInfo().appVersion }}</p>
+    <p>isIOS: {{ isIOS }}</p>
+    <a href="http://itunes.apple.com/kr/app/id393499958?mt=8">Apple Store > Naver</a>
+
     <a
       href="/#"
       @click.prevent="friendsAgreemntUrl">친구이용동의 약관</a>
@@ -59,7 +62,6 @@ export default {
           this.friends
         }/home?svc=pay&url=${encodeURIComponent(this.pay)}`
       } else if (isAndroid || isIOS) {
-        // return `${encodeURIComponent(this.friends)}/home?svc=pay&url=${encodeURIComponent(this.pay)}`
         window.location.href = `intent://inappbrowser?version=30&url=${encodeURIComponent(
           `${this.friends}/home?svc=pay&url=`
         )}${
