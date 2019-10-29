@@ -1,11 +1,12 @@
 <template>
   <div>
-    <p>userAnge: {{ userAnge }}</p>
+    <p>userAnge: {{ userAgent }}</p>
     <p>naverAppUserAgentRegEx: {{ naverAppUserAgentRegEx }}</p>
     <p>matchingData: {{ matchingData }}</p>
     <p>isNaverApp: {{ isNaverApp }}</p>
     <p>serviceCode: {{ getNaverAPPInfo().serviceCode }}</p>
     <p>appVersion: {{ getNaverAPPInfo().appVersion }}</p>
+    <a href="intent://qmenu=voicerecg&version=1#Intent;scheme=naversearchapp;action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;package=com.nhn.android.search;end">페이 홈으로 이동</a>
   </div>
 </template>
 <script>
