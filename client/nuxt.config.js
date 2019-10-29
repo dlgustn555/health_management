@@ -75,7 +75,8 @@ module.exports = {
       routes.push({
         name: '스케줄 달력 조회 화면',
         path: '*',
-        component: '~/pages/calendarPage.vue'
+        // component: '~/pages/calendarPage.vue'
+        component: '~/pages/index.vue'
       })
     }
   }

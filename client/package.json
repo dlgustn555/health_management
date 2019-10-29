@@ -24,6 +24,7 @@
     "bootstrap-vue": "^2.0.0-beta",
     "cross-env": "^5.2.0",
     "lodash": "^4.17.15",
+    "mobile-device-detect": "^0.3.3",
     "nuxt": "^2.0.0",
     "nuxt-device-detect": "^1.1.2",
     "rxjs": "^6.3.3",
